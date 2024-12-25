@@ -19,9 +19,8 @@ int main() {
                 break;
             case 3:
                 cout << "Exiting..." << endl;
-                return 0;  //! Exit the program
+                return 0;
             default:
-                //! This should not be reached because selectRole handles invalid choices
                 break;
         }
     }

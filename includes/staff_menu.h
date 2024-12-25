@@ -3,4 +3,4 @@
 
 void staffMenu();
 
-#endif // STAFF_MENU_H
+#endif

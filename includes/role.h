@@ -6,4 +6,4 @@
 
 int selectRole();
 
-#endif // ROLE_H
+#endif
