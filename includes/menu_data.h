@@ -4,12 +4,12 @@
 #include <string>
 #include <ctime>
 
-const int MAX_ITEMS = 100;
+const int MAX_ITEMS = 10;
 
 // Stock menu (Persiapan Menu)
-extern std::string names[MAX_ITEMS];
-extern int prices[MAX_ITEMS];
-extern int quantities[MAX_ITEMS];
+extern std::string nama[MAX_ITEMS];
+extern int harga[MAX_ITEMS];
+extern int jumlah_stock[MAX_ITEMS];
 
 // Menu siap jual
 extern std::string nama_menu[MAX_ITEMS];

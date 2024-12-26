@@ -18,7 +18,7 @@ int main() {
                 staffMenu();
                 break;
             case 3:
-                cout << "Exiting..." << endl;
+                cout << "Thank You for Using Our Cashier System." << endl;
                 return 0;
             default:
                 break;
