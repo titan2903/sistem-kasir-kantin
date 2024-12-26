@@ -173,28 +173,13 @@ void hitungTotalPesananPerPeriodeIstirahat() {
     }
     
     int total_pesanan = 0;
-    if (jam_istirahat == 1) {
-        for (int i = 0; i < MAX_ITEMS; i++) {
-            if (periode_istirahat[i] == 1) {
-                total_pesanan += jumlah_pesanan[i];
-            }
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        if (periode_istirahat[i] == jam_istirahat) {
+            total_pesanan += jumlah_pesanan[i];
         }
-        cout << "Total pesanan per istirahat: " << total_pesanan << endl;
-    } else if (jam_istirahat == 2) {
-        for (int i = 0; i < MAX_ITEMS; i++) {
-            if (periode_istirahat[i] == 2) {
-                total_pesanan += jumlah_pesanan[i];
-            }
-        }
-        cout << "Total pesanan per istirahat: " << total_pesanan << endl;
-    } else if (jam_istirahat == 3) {
-        for(int i = 0; i < MAX_ITEMS; i++) {
-            if (periode_istirahat[i] == 3) {
-                total_pesanan += jumlah_pesanan[i];
-            }
-        }
-        cout << "Total pesanan per istirahat: " << total_pesanan << endl;
     }
+
+    cout << "Total pesanan per istirahat " << jam_istirahat << ": " << total_pesanan << " Pesanan" << endl;
 }
 
 void lihatStokMakananMenjelangIstirahat() {
@@ -239,12 +224,21 @@ void kapasitasLayanan() {
 
 void lihatRataRataWaktuLayananPerHari() {
     int total_waktu_layanan = 0;
+    int count = 0;
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] != "") {
             total_waktu_layanan += waktu_persiapan[i];
+            count += 1;  
         }
     }
-    cout << "Rata-rata waktu layanan per hari: " << total_waktu_layanan << " Menit" << endl;
+    
+    if (count > 0) {  // To avoid division by zero
+        double rata_rata_waktu = static_cast<double>(total_waktu_layanan) / count;  // Calculate average
+        std::cout << "Rata-rata waktu layanan per hari: " << rata_rata_waktu << " Menit" << std::endl;
+    } else {
+        std::cout << "Tidak ada item menu yang tersedia untuk menghitung waktu rata-rata." << std::endl;
+    }
+
 }
 
 void lihatJumlahPesananPerJenisMakanan() {
@@ -357,5 +351,18 @@ void lihatTotalPenjualanPerMenu() {
 }
 
 void lihatMenuYangPalingLakuPerHari() {
-    cout << "Menu yang paling laku per hari:" << endl;
+    std::cout << "Menu yang paling laku per hari:" << std::endl;
+    
+    int maxSales = menu_terjual[0];
+    for (int i = 1; i < MAX_ITEMS; i++) {
+        if (menu_terjual[i] > maxSales) {
+            maxSales = menu_terjual[i];
+        }
+    }
+
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        if (menu_terjual[i] == maxSales) {
+            std::cout << nama_menu[i] << " - Terjual Sebanyak: " << menu_terjual[i] << std::endl;
+        }
+    }
 }
