@@ -1,7 +1,7 @@
 #include <iostream>
-#include "../includes/role.h" //! Include the header file
-#include "../includes/owner_menu.h" //! Include the header file
-#include "../includes/staff_menu.h" //! Include the header file
+#include "../includes/role.h"
+#include "../includes/owner_menu.h"
+#include "../includes/staff_menu.h"
 using namespace std;
 
 int main() {
