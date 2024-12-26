@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 #include "../includes/menu_data.h"
 using namespace std;
 
@@ -12,20 +13,20 @@ void produksiMenu();
 void kontrolKualitas();
 
 //! Proses Penjualan
-int inputPesananPelanggan();
-int lihatPesananPelanggan();
-int lihatStatusStok();
+void inputPesananPelanggan();
+void lihatPesananPelanggan();
+void lihatStatusStok();
 
 //! Persiapan Menu
-int inputStokAwalPerMenu();
+void inputStokAwalPerMenu();
 int updatePenguranganStokOtomatis();
 
 //! Produksi Menu
-int catatWaktuProduksiMenu();
-// int inputPorsiStandarPerMenu();
+void catatWaktuProduksiMenu();
+// void inputPorsiStandarPerMenu();
 
 //! Kontrol Kualitas
-int checklistMenuSiapJual();
+void checklistMenuSiapJual();
 
 void staffMenu() {
     int choice = 0;
@@ -35,20 +36,26 @@ void staffMenu() {
         cout << "2. Kitchen Operation" << endl;
         cout << "3. Exit" << endl;
         cout << "Pilih menu: ";
-        cin >> choice;
-
-        switch (choice) {
-            case 1:
-                serviceOperation();
-                break;
-            case 2:
-                kitchenOperation();
-                break;
-            case 3:
-                cout << "Exiting Staff Menu." << endl;
-                return;
-            default:
-                cout << "Invalid choice, please try again." << endl;
+        
+        if (cin >> choice) {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+               switch (choice) {
+                    case 1:
+                        serviceOperation();
+                        break;
+                    case 2:
+                        kitchenOperation();
+                        break;
+                    case 3:
+                        cout << "Exiting Staff Menu." << endl;
+                        return;
+                    default:
+                        cout << "Invalid choice, please try again." << endl;
+                }
+        } else {
+            cout << "Invalid input, please enter a number." << endl;
+            cin.clear();  // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
     }
 }
@@ -61,19 +68,25 @@ void serviceOperation() {
         cout << "2. Persiapan Menu" << endl;
         cout << "3. Back to Main Menu" << endl;
         cout << "Select an option: ";
-        cin >> choice;
-
-        switch (choice) {
-            case 1:
-                prosesPenjualan();
-                break;
-            case 2:
-                persiapanMenu();
-                break;
-            case 3:
-                return;
-            default:
-                cout << "Invalid choice, please try again." << endl;
+        
+        if (cin >> choice) {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+                switch (choice) {
+                    case 1:
+                        prosesPenjualan();
+                        break;
+                    case 2:
+                        persiapanMenu();
+                        break;
+                    case 3:
+                        return;
+                    default:
+                        cout << "Invalid choice, please try again." << endl;
+                }
+        } else {
+            cout << "Invalid input, please enter a number." << endl;
+            cin.clear();  // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
     }
 }
@@ -86,19 +99,25 @@ void kitchenOperation() {
         cout << "2. Kontrol Kualitas" << endl;
         cout << "3. Back to Main Menu" << endl;
         cout << "Select an option: ";
-        cin >> choice;
-
-        switch (choice) {
-            case 1:
-                produksiMenu();
-                break;
-            case 2:
-                kontrolKualitas();
-                break;
-            case 3:
-                return;
-            default:
-                cout << "Invalid choice, please try again." << endl;
+        
+        if (cin >> choice) {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+                switch (choice) {
+                    case 1:
+                        produksiMenu();
+                        break;
+                    case 2:
+                        kontrolKualitas();
+                        break;
+                    case 3:
+                        return;
+                    default:
+                        cout << "Invalid choice, please try again." << endl;
+                }
+        } else {
+            cout << "Invalid input, please enter a number." << endl;
+            cin.clear();  // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
     }
 }
@@ -112,27 +131,34 @@ void prosesPenjualan() {
         cout << "3. Lihat Status Stok" << endl;
         cout << "4. Back to Service Operation" << endl;
         cout << "Select an option: ";
-        cin >> choice;
-
-        switch (choice) {
-            case 1:
-                inputPesananPelanggan();
-                break;
-            case 2:
-                lihatPesananPelanggan();
-                break;
-            case 3:
-                lihatStatusStok();
-                break;
-            case 4:
-                return;
-            default:
-                cout << "Invalid choice, please try again." << endl;
+        
+        if (cin >> choice) {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+                switch (choice) {
+                    case 1:
+                        inputPesananPelanggan();
+                        break;
+                    case 2:
+                        lihatPesananPelanggan();
+                        break;
+                    case 3:
+                        lihatStatusStok();
+                        break;
+                    case 4:
+                        return;
+                    default:
+                        cout << "Invalid choice, please try again." << endl;
+                }
+        } else {
+            cout << "Invalid input, please enter a number." << endl;
+            cin.clear();  // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
+            
     }    
 }
 
-int inputPesananPelanggan() {
+void inputPesananPelanggan() {
     cout << "Input Pesanan Pelanggan:" << endl;
     int total_pesanan = 0;
     cout << "Masukkan jumlah pesanan yang ingin di input: ";
@@ -141,7 +167,7 @@ int inputPesananPelanggan() {
 
     if (total_pesanan > MAX_ITEMS) {
         cout << "Jumlah pesanan melebihi batas maksimum yang diizinkan (" << MAX_ITEMS << ")." << endl;
-        return 1;  // Mengembalikan kode error jika jumlah pesanan melebihi batas
+        return;
     }
 
     for (int i = 0; i < total_pesanan; i++) {
@@ -163,28 +189,24 @@ int inputPesananPelanggan() {
 
         cout << endl;  // Mencetak baris kosong sebagai pemisah
     }
-
-    return 0;
 }
 
-int lihatPesananPelanggan() {
+void lihatPesananPelanggan() {
     cout << "Pesanan Pelanggan:" << endl;
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (menu_dipesan[i] != "") {
             cout << "Nomor Pesanan: " << nomor_pesanan[i] << ", Menu Dipesan: " << menu_dipesan[i] << ", Jumlah Pesanan: " << jumlah_pesanan[i] << ", Periode Istirahat: " << periode_istirahat[i] << endl;
         }
     }
-    return 0;
 }
 
-int lihatStatusStok() {
+void lihatStatusStok() {
     cout << "Status Stock Saat Ini:" << endl;
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] != "") {
             cout << "Menu: " << nama_menu[i] << ", Jumlah: " << jumlah_stock[i] << ", Harga: " <<  harga[i] << ", Status Menu: " << status_menu[i] << ", Waktu Persiapan: " << waktu_persiapan[i] << ", Menu Terjual: " << menu_terjual[i] << endl;
         }
     }
-    return 0;
 }
 
 void persiapanMenu() {
@@ -195,24 +217,30 @@ void persiapanMenu() {
         cout << "2. Update pengurangan stok otomatis" << endl;
         cout << "3. Back to Service Operation" << endl;
         cout << "Select an option: ";
-        cin >> choice;
-
-        switch (choice) {
-            case 1:
-                inputStokAwalPerMenu();
-                break;
-            case 2:
-                updatePenguranganStokOtomatis();
-                break;
-            case 3:
-                return;
-            default:
-                cout << "Invalid choice, please try again." << endl;
+        
+        if (cin >> choice) {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            switch (choice) {
+                case 1:
+                    inputStokAwalPerMenu();
+                    break;
+                case 2:
+                    updatePenguranganStokOtomatis();
+                    break;
+                case 3:
+                    return;
+                default:
+                    cout << "Invalid choice, please try again." << endl;
+            }
+        } else {
+            cout << "Invalid input, please enter a number." << endl;
+            cin.clear();  // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
     }
 }
 
-int inputStokAwalPerMenu() {
+void inputStokAwalPerMenu() {
     cout << "Masukkan informasi stok awal untuk setiap menu:" << endl;
     int max_item_menus = 0;
     cout << "Masukkan jumlah menu yang ingin di input: ";
@@ -221,7 +249,7 @@ int inputStokAwalPerMenu() {
 
     if (max_item_menus > MAX_ITEMS) {
         cout << "Jumlah Menu melebihi batas maksimum yang diizinkan (" << MAX_ITEMS << ")." << endl;
-        return 1;
+        return;
     }
 
     for (int i = 0; i < max_item_menus; i++) {
@@ -241,7 +269,6 @@ int inputStokAwalPerMenu() {
 
         cout << endl;
     }
-    return 0;
 }
 
 int updatePenguranganStokOtomatis() {
@@ -256,29 +283,33 @@ void produksiMenu() {
         // cout << "2. Input porsi standar per menu" << endl;
         cout << "2. Back to Kitchen Operation" << endl;
         cout << "Select an option: ";
-        cin >> choice;
-
-        switch (choice) {
-            case 1:
-                catatWaktuProduksiMenu();
-                break;
-            case 2:
-                return;
-            default:
-                cout << "Invalid choice, please try again." << endl;
+        
+        if (cin >> choice) {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input 
+            switch (choice) {
+                case 1:
+                    catatWaktuProduksiMenu();
+                    break;
+                case 2:
+                    return;
+                default:
+                    cout << "Invalid choice, please try again." << endl;
+            }
+        } else {
+            cout << "Invalid input, please enter a number." << endl;
+            cin.clear();  // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
     }
 }
 
-int catatWaktuProduksiMenu() {
+void catatWaktuProduksiMenu() {
     cout << "Input Waktu Produksi Menu:" << endl;
-    return 0;
 }
 
 //! Feature di Tekeout
-// int inputPorsiStandarPerMenu() {
+// void inputPorsiStandarPerMenu() {
 //     cout << "Input Posi Standart Per Menu:" << endl;
-//     return 0;
 // }
 
 void kontrolKualitas() {
@@ -288,21 +319,26 @@ void kontrolKualitas() {
         cout << "1. Checklist menu siap jual" << endl;
         cout << "2. Back to Kitchen Operation" << endl;
         cout << "Select an option: ";
-        cin >> choice;
-
-        switch (choice) {
-            case 1:
-                checklistMenuSiapJual();
-                break;
-            case 2:
-                return;
-            default:
-                cout << "Invalid choice, please try again." << endl;
+        
+        if (cin >> choice) {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            switch (choice) {
+                case 1:
+                    checklistMenuSiapJual();
+                    break;
+                case 2:
+                    return;
+                default:
+                    cout << "Invalid choice, please try again." << endl;
+            }
+        } else {
+            cout << "Invalid input, please enter a number." << endl;
+            cin.clear();  // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
     }
 }
 
-int checklistMenuSiapJual() {
+void checklistMenuSiapJual() {
     cout << "Update Status Menu Siap Dijual:" << endl;
-    return 0;
 }
