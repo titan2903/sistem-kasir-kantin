@@ -205,8 +205,8 @@ int updateStokMakananTersedia() {
 int lihatSisaStokPerMenu() {
     cout << "Stok Per Menu saat ini:" << endl;
     for (int i = 0; i < MAX_ITEMS; i++) {
-        if (nama[i] != "") {
-            cout << "Menu: " << nama[i] << ", Jumlah: " << jumlah_stock[i] << ", Harga: " <<  harga[i] << endl;
+        if (nama_menu[i] != "") {
+            cout << "Menu: " << nama_menu[i] << ", Jumlah: " << jumlah_stock[i] << ", Harga: " <<  harga[i] << endl;
         }
     }
     return 0;

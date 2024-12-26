@@ -7,14 +7,16 @@
 const int MAX_ITEMS = 10;
 
 // Stock menu (Persiapan Menu)
-extern std::string nama[MAX_ITEMS];
+extern std::string nama_menu[MAX_ITEMS];
 extern int harga[MAX_ITEMS];
 extern int jumlah_stock[MAX_ITEMS];
-
-// Menu siap jual
-extern std::string nama_menu[MAX_ITEMS];
 extern std::string status_siap[MAX_ITEMS];
 extern int waktu_persiapan[MAX_ITEMS];
+
+// Menu siap jual
+// extern std::string nama_menu[MAX_ITEMS];
+// extern std::string status_siap[MAX_ITEMS];
+// extern int waktu_persiapan[MAX_ITEMS];
 
 // Produksi menu
 extern std::string nama_menu_produksi[MAX_ITEMS];

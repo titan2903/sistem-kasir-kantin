@@ -1,14 +1,16 @@
 #include "../includes/menu_data.h"
 
 // Stock menu (Persiapan Menu)
-std::string nama[MAX_ITEMS];
+std::string nama_menu[MAX_ITEMS];
 int harga[MAX_ITEMS];
 int jumlah_stock[MAX_ITEMS];
-
-// Menu siap jual
-std::string nama_menu[MAX_ITEMS];
 std::string status_siap[MAX_ITEMS];
 int waktu_persiapan[MAX_ITEMS];
+
+// Menu siap jual
+// std::string nama_menu[MAX_ITEMS];
+// std::string status_siap[MAX_ITEMS];
+// int waktu_persiapan[MAX_ITEMS];
 
 // Produksi menu
 std::string nama_menu_produksi[MAX_ITEMS];
