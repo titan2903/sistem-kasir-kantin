@@ -14,9 +14,8 @@ int menu_terjual[MAX_ITEMS];
 // int waktu_persiapan[MAX_ITEMS];
 
 // Produksi menu
-std::string nama_menu_produksi[MAX_ITEMS];
-int waktu_produksi[MAX_ITEMS];
-int porsi_standar[MAX_ITEMS];
+// std::string nama_menu_produksi[MAX_ITEMS];
+// int waktu_produksi[MAX_ITEMS];
 
 // Pesanan pelanggan
 int nomor_pesanan[MAX_ITEMS];

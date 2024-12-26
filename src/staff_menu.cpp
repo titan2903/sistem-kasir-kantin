@@ -22,7 +22,7 @@ int updatePenguranganStokOtomatis();
 
 //! Produksi Menu
 int catatWaktuProduksiMenu();
-int inputPorsiStandarPerMenu();
+// int inputPorsiStandarPerMenu();
 
 //! Kontrol Kualitas
 int checklistMenuSiapJual();
@@ -130,6 +130,36 @@ void prosesPenjualan() {
 
 int inputPesananPelanggan() {
     cout << "Input Pesanan Pelanggan:" << endl;
+    int total_pesanan = 0;
+    cout << "Masukkan jumlah pesanan yang ingin di input: ";
+    cin >> total_pesanan;
+    cin.ignore(); 
+
+    if (total_pesanan > MAX_ITEMS) {
+        cout << "Jumlah pesanan melebihi batas maksimum yang diizinkan (" << MAX_ITEMS << ")." << endl;
+        return 1;  // Mengembalikan kode error jika jumlah pesanan melebihi batas
+    }
+
+    for (int i = 0; i < total_pesanan; i++) {
+        cout << "Pesanan " << (i + 1) << ":" << endl;
+        cout << "Nomor Pesanan: ";
+        cin >> nomor_pesanan[i];
+        cin.ignore(); 
+
+        cout << "Menu yang Dipesan: ";
+        getline(cin, menu_dipesan[i]);
+
+        cout << "Jumlah Pesanan: ";
+        cin >> jumlah_pesanan[i];
+        cin.ignore(); 
+
+        cout << "Periode Istirahat (1, 2, atau 3): ";
+        cin >> periode_istirahat[i];
+        cin.ignore(); 
+
+        cout << endl;  // Mencetak baris kosong sebagai pemisah
+    }
+
     return 0;
 }
 
@@ -173,10 +203,10 @@ int inputStokAwalPerMenu() {
     int max_item_menus = 0;
     cout << "Masukkan jumlah menu yang ingin di input: ";
     cin >> max_item_menus;
-    cin.ignore(); // Mengabaikan newline yang tersisa setelah membaca integer
+    cin.ignore();
 
     if (max_item_menus > MAX_ITEMS) {
-        cout << "Jumlah menu melebihi batas maksimum." << endl;
+        cout << "Jumlah Menu melebihi batas maksimum yang diizinkan (" << MAX_ITEMS << ")." << endl;
         return 1;
     }
 
@@ -189,7 +219,7 @@ int inputStokAwalPerMenu() {
         cin >> harga[i];
         cout << "Jumlah Stok: ";
         cin >> jumlah_stock[i];
-        cin.ignore();  // Mengabaikan newline yang tersisa setelah membaca integer
+        cin.ignore(); 
 
         status_menu[i] = "tidak siap"; // Inisialisasi menu status sebagai "tidak siap"
         waktu_persiapan[i] = 0;  // Inisialisasi waktu persiapan sebagai 0
@@ -209,8 +239,8 @@ void produksiMenu() {
     while (true) {
         cout << "\nProduksi Menu Options:" << endl;
         cout << "1. Catat waktu produksi menu" << endl;
-        cout << "2. Input porsi standar per menu" << endl;
-        cout << "3. Back to Kitchen Operation" << endl;
+        // cout << "2. Input porsi standar per menu" << endl;
+        cout << "2. Back to Kitchen Operation" << endl;
         cout << "Select an option: ";
         cin >> choice;
 
@@ -219,9 +249,6 @@ void produksiMenu() {
                 catatWaktuProduksiMenu();
                 break;
             case 2:
-                inputPorsiStandarPerMenu();
-                break;
-            case 3:
                 return;
             default:
                 cout << "Invalid choice, please try again." << endl;
@@ -234,10 +261,10 @@ int catatWaktuProduksiMenu() {
     return 0;
 }
 
-int inputPorsiStandarPerMenu() {
-    cout << "Input Posi Standart Per Menu:" << endl;
-    return 0;
-}
+// int inputPorsiStandarPerMenu() {
+//     cout << "Input Posi Standart Per Menu:" << endl;
+//     return 0;
+// }
 
 void kontrolKualitas() {
     int choice = 0;

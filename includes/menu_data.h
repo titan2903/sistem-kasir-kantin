@@ -20,9 +20,8 @@ extern int menu_terjual[MAX_ITEMS];
 // extern int waktu_persiapan[MAX_ITEMS];
 
 // Produksi menu
-extern std::string nama_menu_produksi[MAX_ITEMS];
-extern int waktu_produksi[MAX_ITEMS];
-extern int porsi_standar[MAX_ITEMS];
+// extern std::string nama_menu_produksi[MAX_ITEMS];
+// extern int waktu_produksi[MAX_ITEMS];
 
 // Pesanan pelanggan
 extern int nomor_pesanan[MAX_ITEMS];
