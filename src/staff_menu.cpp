@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include "../includes/menu_data.h"
 using namespace std;
 
@@ -14,6 +13,7 @@ void kontrolKualitas();
 
 //! Proses Penjualan
 int inputPesananPelanggan();
+int lihatPesananPelanggan();
 int lihatStatusStok();
 
 //! Persiapan Menu
@@ -108,8 +108,9 @@ void prosesPenjualan() {
     while (true) {
         cout << "\nProses Penjualan Options:" << endl;
         cout << "1. Input Pesanan Pelanggan" << endl;
-        cout << "2. Lihat Status Stok" << endl;
-        cout << "3. Back to Service Operation" << endl;
+        cout << "2. Melihat Pesanan Pelanggan" << endl;
+        cout << "3. Lihat Status Stok" << endl;
+        cout << "4. Back to Service Operation" << endl;
         cout << "Select an option: ";
         cin >> choice;
 
@@ -118,9 +119,12 @@ void prosesPenjualan() {
                 inputPesananPelanggan();
                 break;
             case 2:
-                lihatStatusStok();
+                lihatPesananPelanggan();
                 break;
             case 3:
+                lihatStatusStok();
+                break;
+            case 4:
                 return;
             default:
                 cout << "Invalid choice, please try again." << endl;
@@ -160,6 +164,16 @@ int inputPesananPelanggan() {
         cout << endl;  // Mencetak baris kosong sebagai pemisah
     }
 
+    return 0;
+}
+
+int lihatPesananPelanggan() {
+    cout << "Pesanan Pelanggan:" << endl;
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        if (menu_dipesan[i] != "") {
+            cout << "Nomor Pesanan: " << nomor_pesanan[i] << ", Menu Dipesan: " << menu_dipesan[i] << ", Jumlah Pesanan: " << jumlah_pesanan[i] << ", Periode Istirahat: " << periode_istirahat[i] << endl;
+        }
+    }
     return 0;
 }
 
@@ -261,6 +275,7 @@ int catatWaktuProduksiMenu() {
     return 0;
 }
 
+//! Feature di Tekeout
 // int inputPorsiStandarPerMenu() {
 //     cout << "Input Posi Standart Per Menu:" << endl;
 //     return 0;
