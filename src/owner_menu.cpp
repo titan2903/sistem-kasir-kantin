@@ -116,7 +116,7 @@ void pengelolaanJamSibuk() {
                 cout << "Total pesanan per istirahat: " << hitungTotalPesananPerPeriodeIstirahat() << endl;
                 break;
             case 2:
-                cout << "Stok makanan menjelang istirahat: " << lihatStokMakananMenjelangIstirahat() << endl;
+                lihatStokMakananMenjelangIstirahat();
                 break;
             case 3:
                 return;
@@ -127,13 +127,11 @@ void pengelolaanJamSibuk() {
 }
 
 int hitungTotalPesananPerPeriodeIstirahat() {
-    //! Implement the functionality here
-    cout << "Total pesanan per periode istirahat: 100" << endl;
     return 0;
 }
 
 int lihatStokMakananMenjelangIstirahat() {
-    //! Implement the functionality here
+    cout << "Stock Makanan Menjelang Istirahat:" << endl;
     return 0;
 }
 
@@ -152,7 +150,7 @@ void kapasitasLayanan() {
                 cout << "Rata-rata waktu layanan per hari: " << lihatRataRataWaktuLayananPerHari() << endl;
                 break;
             case 2:
-                cout << "Jumlah pesanan per jenis makanan: " << lihatJumlahPesananPerJenisMakanan() << endl;
+                lihatJumlahPesananPerJenisMakanan();
                 break;
             case 3:
                 return;
@@ -163,12 +161,11 @@ void kapasitasLayanan() {
 }
 
 int lihatRataRataWaktuLayananPerHari() {
-    //! Implement the functionality here
     return 0;
 }
 
 int lihatJumlahPesananPerJenisMakanan() {
-    //! Implement the functionality here
+    cout << "Jumlah pesanan per jenis makanan:" << endl;
     return 0;
 }
 
@@ -224,10 +221,10 @@ void analisisMenu() {
 
         switch (choice) {
             case 1:
-                cout << "Total penjualan per menu: " << lihatTotalPenjualanPerMenu() << endl;
+                lihatTotalPenjualanPerMenu();
                 break;
             case 2:
-                cout << "Menu yang paling laku per hari: " << lihatMenuYangPalingLakuPerHari() << endl;
+                lihatMenuYangPalingLakuPerHari();
                 break;
             case 3:
                 return;
@@ -238,11 +235,17 @@ void analisisMenu() {
 }
 
 int lihatTotalPenjualanPerMenu() {
-    //! Implement the functionality here
+    cout << "Total penjualan per menu:" << endl;
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        if(nama_menu[i] != "") {
+            cout << "Menu: " << nama_menu[i] << ", Total Penjualan: " << menu_terjual[i] << endl;
+        }
+    }
     return 0;
 }
 
 int lihatMenuYangPalingLakuPerHari() {
+    cout << "Menu yang paling laku per hari:" << endl;
     //! Implement the functionality here
     return 0;
 }

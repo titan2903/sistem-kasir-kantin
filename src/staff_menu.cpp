@@ -109,8 +109,8 @@ void prosesPenjualan() {
         cout << "\nProses Penjualan Options:" << endl;
         cout << "1. Input Pesanan Pelanggan" << endl;
         cout << "2. Lihat Status Stok" << endl;
+        cout << "3. Back to Service Operation" << endl;
         cout << "Select an option: ";
-        cout << "3. Back to nService Operation" << endl;
         cin >> choice;
 
         switch (choice) {
@@ -129,12 +129,17 @@ void prosesPenjualan() {
 }
 
 int inputPesananPelanggan() {
-    //! Implement the functionality here
+    cout << "Input Pesanan Pelanggan:" << endl;
     return 0;
 }
 
 int lihatStatusStok() {
-    //! Implement the functionality here
+    cout << "Status Stock Saat Ini:" << endl;
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        if (nama_menu[i] != "") {
+            cout << "Menu: " << nama_menu[i] << ", Jumlah: " << jumlah_stock[i] << ", Harga: " <<  harga[i] << ", Status Menu: " << status_menu[i] << ", Waktu Persiapan: " << waktu_persiapan[i] << ", Menu Terjual: " << menu_terjual[i] << endl;
+        }
+    }
     return 0;
 }
 
@@ -164,12 +169,38 @@ void persiapanMenu() {
 }
 
 int inputStokAwalPerMenu() {
-    //! Implement the functionality here
+    cout << "Masukkan informasi stok awal untuk setiap menu:" << endl;
+    int max_item_menus = 0;
+    cout << "Masukkan jumlah menu yang ingin di input: ";
+    cin >> max_item_menus;
+    cin.ignore(); // Mengabaikan newline yang tersisa setelah membaca integer
+
+    if (max_item_menus > MAX_ITEMS) {
+        cout << "Jumlah menu melebihi batas maksimum." << endl;
+        return 1;
+    }
+
+    for (int i = 0; i < max_item_menus; i++) {
+        cout << "Menu " << (i + 1) << ":" << endl;
+        cout << "Nama Menu: ";
+        getline(cin, nama_menu[i]);  // Menggunakan getline setelah cin.ignore()
+
+        cout << "Harga: ";
+        cin >> harga[i];
+        cout << "Jumlah Stok: ";
+        cin >> jumlah_stock[i];
+        cin.ignore();  // Mengabaikan newline yang tersisa setelah membaca integer
+
+        status_menu[i] = "tidak siap"; // Inisialisasi menu status sebagai "tidak siap"
+        waktu_persiapan[i] = 0;  // Inisialisasi waktu persiapan sebagai 0
+        menu_terjual[i] = 0;  // Inisialisasi menu terjual sebagai 0
+
+        cout << endl;
+    }
     return 0;
 }
 
 int updatePenguranganStokOtomatis() {
-    //! Implement the functionality here
     return 0;
 }
 
@@ -199,12 +230,12 @@ void produksiMenu() {
 }
 
 int catatWaktuProduksiMenu() {
-    //! Implement the functionality here
+    cout << "Input Waktu Produksi Menu:" << endl;
     return 0;
 }
 
 int inputPorsiStandarPerMenu() {
-    //! Implement the functionality here
+    cout << "Input Posi Standart Per Menu:" << endl;
     return 0;
 }
 
@@ -230,6 +261,6 @@ void kontrolKualitas() {
 }
 
 int checklistMenuSiapJual() {
-    //! Implement the functionality here
+    cout << "Update Status Menu Siap Dijual:" << endl;
     return 0;
 }
