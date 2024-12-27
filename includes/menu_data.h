@@ -1,7 +1,6 @@
 #ifndef MENU_DATA_H
 #define MENU_DATA_H
 using namespace std;
-
 #include <string>
 
 const int MAX_ITEMS = 100;
