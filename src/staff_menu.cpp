@@ -2,6 +2,7 @@
 #include <limits>
 #include "../includes/menu_data.h"
 #include "../includes/helper.h"
+#include "../includes/const.h"
 using namespace std;
 
 //! Function prototypes for staff operations
@@ -23,6 +24,7 @@ void inputStokAwalPerMenu();
 
 //! Produksi Menu
 void catatWaktuProduksiMenu();
+void melihatWaktuProduksiSetiapMenu();
 // void inputPorsiStandarPerMenu();
 
 //! Kontrol Kualitas
@@ -276,7 +278,7 @@ void inputPesananPelanggan() {
             }
         }
 
-        status_menu[i] = "tidak siap";  // Set the status to "tidak siap" by default
+        status_menu[i] = STATUS_TIDAK_SIAP;  // Set the status to STATUS_TIDAK_SIAP by default
         waktu_pesan[i] = time(0);  // Set the order time to the current time
 
         updatePenguranganStokOtomatis(menu_dipesan[i], jumlah_pesanan[i]);
@@ -404,7 +406,8 @@ void produksiMenu() {
     while (true) {
         cout << "\nProduksi Menu Options:" << endl;
         cout << "1. Catat waktu produksi menu" << endl;
-        cout << "2. Back to Kitchen Operation" << endl;
+        cout << "2. Melihat waktu produksi setiap menu" << endl;
+        cout << "3. Back to Kitchen Operation" << endl;
         cout << "Select an option: ";
         // cout << "2. Input porsi standar per menu" << endl;
         
@@ -415,6 +418,8 @@ void produksiMenu() {
                     catatWaktuProduksiMenu();
                     break;
                 case 2:
+                    melihatWaktuProduksiSetiapMenu();
+                case 3:
                     return;
                 default:
                     cout << "Invalid choice, please try again." << endl;
@@ -432,15 +437,13 @@ void catatWaktuProduksiMenu() {
 
     cout << "\nList menu pesanan yang belum memiliki Waktu Produksi:" << endl;
     for (int i = 0; i < MAX_ITEMS; i++) {
-        if (waktu_persiapan[i] == 0 && status_menu[i] == "siap") {
+        if (waktu_persiapan[i] == 0 && status_menu[i] == STATUS_SIAP) {
             cout << "Menu " << menu_dipesan[i] << ", Waktu Produksi: " << waktu_persiapan[i] << endl;
         }
     }
     cout << endl;  // Print a blank line as a separator
 
     string nama_menu_pesanan;
-    cout << "Input Nama Menu yang akan dicatat waktu persiapannya: ";
-    getline(cin, nama_menu_pesanan);
 
     // !Dummy data deleted SOON
     // Simpan waktu saat ini ke 'awal'
@@ -449,18 +452,42 @@ void catatWaktuProduksiMenu() {
     // Tambahkan selisih waktu ke 'akhir' (misalnya, tambahkan 900 detik atau 15 menit)
     akhir = awal + 900;  // 15 menit kemudian
 
-    if (!nama_menu_pesanan.empty()) {
-        for (int i = 0; i < MAX_ITEMS; i++) {
-            if (menu_dipesan[i] == nama_menu_pesanan && status_menu[i] == "siap") {
-                // waktu_persiapan[i] = calculateTimeDifferenceInMinutes(waktu_selesai[i], waktu_pesan[i]);
-                waktu_persiapan[i] = calculateTimeDifferenceInMinutes(akhir, awal);
-                cout << "Waktu Persiapan untuk " << nama_menu_pesanan << " diperbarui menjadi " << waktu_persiapan[i] << " menit." << endl;
-                return;  // Keluar setelah memperbarui waktu
+    bool isUpdated = false;
+    while (!isUpdated) {
+        cout << "Input Nama Menu yang akan dicatat waktu persiapannya: ";
+        getline(cin, nama_menu_pesanan);
+        if (!nama_menu_pesanan.empty()) {
+            for (int i = 0; i < MAX_ITEMS; i++) {
+                if (menu_dipesan[i] == nama_menu_pesanan && status_menu[i] == STATUS_SIAP) {
+                    if (waktu_persiapan[i] > 0) {
+                        cout << "Waktu Persiapan untuk " << nama_menu_pesanan << " sudah dicatat sebelumnya." << endl;
+                        isUpdated = true;
+                        break;
+                    }
+                    // waktu_persiapan[i] = calculateTimeDifferenceInMinutes(waktu_selesai[i], waktu_pesan[i]);
+                    waktu_persiapan[i] = calculateTimeDifferenceInMinutes(akhir, awal);
+                    cout << "Waktu Persiapan untuk " << nama_menu_pesanan << " diperbarui menjadi " << waktu_persiapan[i] << " menit." << endl;
+                    isUpdated = true;
+                    break;
+                }
             }
+            if (!isUpdated) {
+                cout << "Pesanan Menu " << nama_menu_pesanan << " tidak ditemukan atau tidak siap, silakan coba lagi." << endl;
+            }
+        } else {
+            cout << "Nama menu tidak boleh kosong, silakan masukkan lagi." << endl;
         }
-        cout << "Pesanan Menu " << nama_menu_pesanan << " tidak ditemukan atau tidak siap, silakan coba lagi." << endl;
-    } else {
-        cout << "Nama menu tidak boleh kosong, silakan masukkan lagi." << endl;
+    }
+    
+}
+
+void melihatWaktuProduksiSetiapMenu() {
+    cout << "Waktu Produksi Setiap Menu:" << endl;
+
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        if (status_menu[i] == STATUS_SIAP) {
+            cout << "Menu: " << menu_dipesan[i] << ", Waktu Persiapan: " << waktu_persiapan[i] << " menit" << endl;
+        }
     }
 }
 
@@ -501,7 +528,7 @@ void checklistMenuSiapJual() {
 
     for(int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] != "") {
-            if (status_menu[i] == "tidak siap") {
+            if (status_menu[i] == STATUS_TIDAK_SIAP) {
                 cout << "Menu " << nama_menu[i] << " belum siap dijual." << endl;
                 cout << "Apakah menu " << nama_menu[i] << " sudah siap dijual? (y/n): ";
                 string choice;
@@ -517,7 +544,7 @@ void checklistMenuSiapJual() {
                     }
                 }
                 if (choice == "y") {
-                    status_menu[i] = "siap";
+                    status_menu[i] = STATUS_SIAP;
                     waktu_selesai[i] = time(0); // Set the completion time to the current time
                     cout << "Status menu " << nama_menu[i] << " telah diubah menjadi 'siap' dijual." << endl;
                 } else {
