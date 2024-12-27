@@ -186,7 +186,7 @@ void lihatStokMakananMenjelangIstirahat() {
     cout << "Stock Makanan Menjelang Istirahat:" << endl;
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] != "") {
-            cout << "Menu: " << nama_menu[i] << ", Jumlah: " << jumlah_stock[i] << ", Harga: " <<  harga[i] << ", Status Menu: " << status_menu[i] << endl;
+            cout << "Menu: " << nama_menu[i] << ", Jumlah Stock: " << jumlah_stock[i] << ", Harga: " <<  harga[i] << ", Status Menu: " << status_menu[i] << endl;
         }
     }
 }
@@ -298,6 +298,60 @@ void kontrolStok() {
 
 int updateStokMakananTersedia() {
     //! Implement the functionality here
+    cout << "Update stok makanan tersedia:" << endl;
+    cout << "\nMakanan yang tersedia saat ini:" << endl;
+    for (int i = 0; i < MAX_ITEMS; i++)
+    {
+        if(nama_menu[i] != "") {
+            cout << "Menu: " << nama_menu[i] << ", Jumlah Stock: " << jumlah_stock[i] << endl;
+        }
+    }
+    
+    string menu;
+    int jumlah;
+
+    while(true) {
+        cout << "Masukkan nama menu yang akan diupdate stoknya: ";
+        getline(cin, menu);
+        if (menu == "") {
+            cout << "Nama menu tidak boleh kosong." << endl;
+        } else {
+            break;
+        }
+    }
+
+    while (true) {
+        cout << "Masukkan jumlah stok (tidak boleh 0) yang akan diupdate: ";
+        if (cin >> jumlah) {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            if (jumlah >= 1) {
+                break;
+            } else {
+                cout << "Invalid choice, please try again." << endl;
+            }
+        } else {
+            cout << "Invalid input, please enter a number." << endl;
+            cin.clear();  // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
+        }
+    }
+
+    bool found = false;
+    for (int i = 0; i < MAX_ITEMS; i++)
+    {
+        if (nama_menu[i] == menu)
+        {
+            jumlah_stock[i] = jumlah;
+            cout << "Stok dengan Nama Menu " << menu << " berhasil diupdate menjadi " << jumlah << endl;
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        cout << "Nama Menu " << menu << " tidak ditemukan." << endl;
+    }
+
     return 0;
 }
 
@@ -305,7 +359,7 @@ void lihatSisaStokPerMenu() {
     cout << "Stok Per Menu saat ini:" << endl;
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] != "") {
-            cout << "Menu: " << nama_menu[i] << ", Jumlah: " << jumlah_stock[i] << ", Harga: " <<  harga[i] << endl;
+            cout << "Menu: " << nama_menu[i] << ", Jumlah Stock: " << jumlah_stock[i] << endl;
         }
     }
 }

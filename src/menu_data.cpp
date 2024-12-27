@@ -13,8 +13,8 @@ std::string nama_menu[MAX_ITEMS] = {
     "Steak", "Fish & Chips", "Chicken Wings", "Sushi", "Mie Ayam"
 };
 int harga[MAX_ITEMS] = {
-    120, 100, 90, 75, 60,
-    150, 130, 85, 200, 120
+    30000, 10000, 9000, 7500, 16000,
+    50000, 30000, 25000, 20000, 12000
 };
 int jumlah_stock[MAX_ITEMS] = {
     50, 40, 60, 70, 80,
