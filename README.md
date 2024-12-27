@@ -2,10 +2,10 @@
 
 ## Kelompok 13
 
-1. Titanio Yudista
-2. Fairuz Fajri
-3. Muhammad Haikal
-4. Muhammad Taqi Dzakwan
+1. Titanio Yudista (24120300002)
+2. Fairuz Fajri (24120300026)
+3. Muhammad Haikal (24120300018)
+4. Muhammad Taqi Dzakwan (24120400008)
 
 ## Software Requirements
 
