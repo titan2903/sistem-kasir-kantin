@@ -55,3 +55,83 @@
 ## Flow Navigasi Sistem Kasir untuk Kantin
 
 ![Gambar Flow Navigasi Sistem Kasir untuk Kantin](assets/navigasi%20aplikasi.drawio.png)
+
+## Prerequisites
+
+Sebelum Anda memulai, pastikan Anda telah memenuhi kebutuhan berikut:
+
+### Sistem Operasi
+
+- **Windows**: Windows 10 atau lebih baru.
+- **macOS**: macOS 10.15 Catalina atau lebih baru.
+- **Linux**: Distro Linux berbasis Debian (seperti Ubuntu), Fedora, atau CentOS.
+
+### Perangkat Lunak
+
+- **Compiler C++**: GCC, Clang, atau MSVC.
+- **CMake**: Versi 3.15 atau lebih baru (opsional, jika proyek Anda menggunakan CMake).
+
+### Instalasi Compiler C++
+
+#### Windows
+
+1. **Menggunakan Visual Studio:**
+   - Unduh dan instal [Visual Studio](https://visualstudio.microsoft.com/downloads/).
+   - Selama instalasi, pilih workload "Desktop development with C++" untuk menginstal MSVC.
+
+2. **Menggunakan MinGW:**
+   - Unduh MinGW dari [MinGW-w64](https://www.mingw-w64.org/downloads/).
+   - Ikuti instruksi instalasi dan pastikan `g++.exe` terdapat dalam PATH sistem Anda.
+
+#### macOS
+
+1. **Menggunakan Xcode:**
+   - Instal Xcode dari Mac App Store.
+   - Buka Xcode dan instal alat baris perintah melalui `Preferences > Downloads`.
+
+2. **Menggunakan Homebrew:**
+   - Instal Homebrew dengan menjalankan:
+
+     ```bash
+     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+     ```
+
+   - Instal GCC dengan Homebrew:
+
+     ```bash
+     brew install gcc
+     ```
+
+#### Linux (Ubuntu)
+
+1. **Menggunakan apt:**
+   - Buka terminal dan jalankan perintah berikut:
+
+     ```bash
+     sudo apt update
+     sudo apt install build-essential
+     ```
+
+   - Perintah ini akan menginstal GCC, G++ dan make.
+
+### Verifikasi Instalasi
+
+Untuk memverifikasi bahwa compiler C++ telah terinstal dengan benar, buka terminal atau command prompt dan ketik:
+
+```bash
+g++ --version
+```
+
+## Run
+
+1. **Clone Repository:**
+
+   ```bash
+   https://github.com/titan2903/sistem-kasir-kantin.git
+   ```
+
+2. **Run System Application:**
+
+  ```bash
+  g++ -I../include src/main.cpp src/role.cpp src/owner_menu.cpp src/staff_menu.cpp src/menu_data.cpp -o src/output && ./src/output
+  ```
