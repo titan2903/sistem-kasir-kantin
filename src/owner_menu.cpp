@@ -187,7 +187,7 @@ void lihatStokMenuMenjelangIstirahat() {
     cout << "Stock Menu Menjelang Istirahat:" << endl;
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] != "") {
-            cout << "Menu: " << nama_menu[i] << ", Jumlah Stock: " << jumlah_stock[i] << ", Harga: " <<  harga[i] << ", Status Menu: " << status_menu[i] << endl;
+            cout << "Menu: " << nama_menu[i] << ", Jumlah Stock: " << jumlah_stock[i] << ", Harga: " <<  harga[i] << endl;
         }
     }
 }
