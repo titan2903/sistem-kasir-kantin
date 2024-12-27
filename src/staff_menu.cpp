@@ -276,6 +276,9 @@ void inputPesananPelanggan() {
             }
         }
 
+        status_menu[i] = "tidak siap";  // Set the status to "tidak siap" by default
+        waktu_pesan[i] = time(0);  // Set the order time to the current time
+
         updatePenguranganStokOtomatis(menu_dipesan[i], jumlah_pesanan[i]);
 
         cout << endl;  // Mencetak baris kosong sebagai pemisah
@@ -287,7 +290,7 @@ void lihatPesananPelanggan() {
 
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (menu_dipesan[i] != "") {
-            cout << "Nomor Pesanan: " << nomor_pesanan[i] << ", Menu Dipesan: " << menu_dipesan[i] << ", Jumlah Pesanan: " << jumlah_pesanan[i] << ", Periode Istirahat: " << periode_istirahat[i] << endl;
+            cout << "Nomor Pesanan: " << nomor_pesanan[i] << ", Menu Dipesan: " << menu_dipesan[i] << ", Jumlah Pesanan: " << jumlah_pesanan[i] << ", Periode Istirahat: " << periode_istirahat[i] << ", Status Pesanan: " << status_menu[i] << ", Waktu Pesan: " << waktu_pesan[i] << endl;
         }
     }
 }
@@ -297,7 +300,7 @@ void lihatStatusStokSaatIni() {
 
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] != "") {
-            cout << "Menu: " << nama_menu[i] << ", Jumlah: " << jumlah_stock[i] << ", Status Menu: " << status_menu[i] << ", Waktu Persiapan: " << waktu_persiapan[i] << ", Menu Terjual: " << menu_terjual[i] << endl;
+            cout << "Menu: " << nama_menu[i] << ", Jumlah: " << jumlah_stock[i] << ", Menu Terjual: " << menu_terjual[i] << endl;
         }
     }
 }
@@ -390,9 +393,6 @@ void inputStokAwalPerMenu() { //! Butuh menambahkan validasi setiap inputan
             }
         }
 
-
-        status_menu[i] = "tidak siap"; // Inisialisasi menu status sebagai "tidak siap"
-        waktu_persiapan[i] = 0;  // Inisialisasi waktu persiapan sebagai 0
         menu_terjual[i] = 0;  // Inisialisasi menu terjual sebagai 0
 
         cout << endl;
@@ -429,6 +429,39 @@ void produksiMenu() {
 
 void catatWaktuProduksiMenu() {
     cout << "Mencatat Waktu Produksi Menu:" << endl;
+
+    cout << "\nList menu pesanan yang belum memiliki Waktu Produksi:" << endl;
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        if (waktu_persiapan[i] == 0 && status_menu[i] == "siap") {
+            cout << "Menu " << menu_dipesan[i] << ", Waktu Produksi: " << waktu_persiapan[i] << endl;
+        }
+    }
+    cout << endl;  // Print a blank line as a separator
+
+    string nama_menu_pesanan;
+    cout << "Input Nama Menu yang akan dicatat waktu persiapannya: ";
+    getline(cin, nama_menu_pesanan);
+
+    // !Dummy data deleted SOON
+    // Simpan waktu saat ini ke 'awal'
+    time_t awal, akhir;
+    time(&awal);
+    // Tambahkan selisih waktu ke 'akhir' (misalnya, tambahkan 900 detik atau 15 menit)
+    akhir = awal + 900;  // 15 menit kemudian
+
+    if (!nama_menu_pesanan.empty()) {
+        for (int i = 0; i < MAX_ITEMS; i++) {
+            if (menu_dipesan[i] == nama_menu_pesanan && status_menu[i] == "siap") {
+                // waktu_persiapan[i] = calculateTimeDifferenceInMinutes(waktu_selesai[i], waktu_pesan[i]);
+                waktu_persiapan[i] = calculateTimeDifferenceInMinutes(akhir, awal);
+                cout << "Waktu Persiapan untuk " << nama_menu_pesanan << " diperbarui menjadi " << waktu_persiapan[i] << " menit." << endl;
+                return;  // Keluar setelah memperbarui waktu
+            }
+        }
+        cout << "Pesanan Menu " << nama_menu_pesanan << " tidak ditemukan atau tidak siap, silakan coba lagi." << endl;
+    } else {
+        cout << "Nama menu tidak boleh kosong, silakan masukkan lagi." << endl;
+    }
 }
 
 //! Feature di Tekeout
@@ -485,6 +518,7 @@ void checklistMenuSiapJual() {
                 }
                 if (choice == "y") {
                     status_menu[i] = "siap";
+                    waktu_selesai[i] = time(0); // Set the completion time to the current time
                     cout << "Status menu " << nama_menu[i] << " telah diubah menjadi 'siap' dijual." << endl;
                 } else {
                     cout << "Status menu " << nama_menu[i] << " tetap 'tidak siap' dijual." << endl;
