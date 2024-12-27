@@ -465,4 +465,31 @@ void kontrolKualitas() {
 
 void checklistMenuSiapJual() {
     cout << "Melakukan Update Status Menu Siap Dijual:" << endl;
+
+    for(int i = 0; i < MAX_ITEMS; i++) {
+        if (nama_menu[i] != "") {
+            if (status_menu[i] == "tidak siap") {
+                cout << "Menu " << nama_menu[i] << " belum siap dijual." << endl;
+                cout << "Apakah menu " << nama_menu[i] << " sudah siap dijual? (y/n): ";
+                string choice;
+
+                cin >> choice;
+                while (true) {
+                    if (choice == "y" || choice == "n") {
+                        break;
+                    } else {
+                        cout << "Pilihan tidak valid, silakan masukkan 'y' atau 'n'." << endl;
+                        cout << "Apakah menu " << nama_menu[i] << " sudah siap dijual? (y/n): ";
+                        cin >> choice;
+                    }
+                }
+                if (choice == "y") {
+                    status_menu[i] = "siap";
+                    cout << "Status menu " << nama_menu[i] << " telah diubah menjadi 'siap' dijual." << endl;
+                } else {
+                    cout << "Status menu " << nama_menu[i] << " tetap 'tidak siap' dijual." << endl;
+                }
+            }
+        }
+    }
 }
