@@ -133,5 +133,5 @@ g++ --version
 2. **Run System Application:**
 
   ```bash
-  g++ -I../include src/main.cpp src/role.cpp src/owner_menu.cpp src/staff_menu.cpp src/menu_data.cpp -o src/output && ./src/output
+  g++ -I../include src/main.cpp src/role.cpp src/owner_menu.cpp src/staff_menu.cpp src/menu_data.cpp src/helper.cpp -o src/output && ./src/output
   ```

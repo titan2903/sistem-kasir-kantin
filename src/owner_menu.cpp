@@ -246,6 +246,10 @@ void lihatJumlahPesananPerJenisMenu() {
     cout << "Jumlah pesanan per jenis menu:" << endl;
 
     for (int i = 0; i < MAX_ITEMS; i++) {
+        if (nama_menu[i] == "") {
+            continue;
+        }
+
         bool counted = false;
         for (int j = 0; j < i; j++) {
             if (menu_dipesan[i] == menu_dipesan[j]) {
@@ -316,7 +320,7 @@ int updateStokMenuTersedia() {
         cout << "Masukkan  yang akan diupdate stoknya: ";
         getline(cin, menu);
         if (menu == "") {
-            cout << " tidak boleh kosong." << endl;
+            cout << "Nama Menu tidak boleh kosong." << endl;
         } else {
             break;
         }
@@ -351,7 +355,7 @@ int updateStokMenuTersedia() {
     }
 
     if (!found) {
-        cout << " " << menu << " tidak ditemukan." << endl;
+        cout << "Menu " << menu << " tidak ditemukan." << endl;
     }
 
     return 0;
@@ -420,7 +424,7 @@ void lihatMenuYangPalingLakuPerHari() {
 
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (menu_terjual[i] == maxSales) {
-            cout << nama_menu[i] << " - Terjual Sebanyak: " << menu_terjual[i] << endl;
+            cout << "Menu: " << nama_menu[i] << ", Terjual Sebanyak: " << menu_terjual[i] << endl;
         }
     }
 }

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <limits>
 #include "../includes/menu_data.h"
+#include "../includes/helper.h"
 using namespace std;
 
 //! Function prototypes for staff operations
@@ -15,11 +16,10 @@ void kontrolKualitas();
 //! Proses Penjualan
 void inputPesananPelanggan();
 void lihatPesananPelanggan();
-void lihatStatusStok();
+void lihatStatusStokSaatIni();
 
 //! Persiapan Menu
 void inputStokAwalPerMenu();
-int updatePenguranganStokOtomatis();
 
 //! Produksi Menu
 void catatWaktuProduksiMenu();
@@ -142,7 +142,7 @@ void prosesPenjualan() {
                         lihatPesananPelanggan();
                         break;
                     case 3:
-                        lihatStatusStok();
+                        lihatStatusStokSaatIni();
                         break;
                     case 4:
                         return;
@@ -158,7 +158,7 @@ void prosesPenjualan() {
     }    
 }
 
-void inputPesananPelanggan() { //! Butuh menambahkan validasi setiap inputan
+void inputPesananPelanggan() {
     cout << "Membuat Pesanan Pelanggan:" << endl;
 
     int total_pesanan = 0;
@@ -173,20 +173,110 @@ void inputPesananPelanggan() { //! Butuh menambahkan validasi setiap inputan
 
     for (int i = 0; i < total_pesanan; i++) {
         cout << "Pesanan " << (i + 1) << ":" << endl;
-        cout << "Nomor Pesanan: ";
-        cin >> nomor_pesanan[i];
-        cin.ignore(); 
 
-        cout << "Menu yang Dipesan: ";
-        getline(cin, menu_dipesan[i]);
+        int tempOrderNumber;
+        bool isUnique;
 
-        cout << "Jumlah Pesanan: ";
-        cin >> jumlah_pesanan[i];
-        cin.ignore(); 
+        // Validate unique nomor pesanan
+        do {
+            cout << "Nomor Pesanan: ";
+            if (cin >> tempOrderNumber) {
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+                isUnique = true;  // Assume the number is unique unless found otherwise
 
-        cout << "Periode Istirahat (1, 2, atau 3): ";
-        cin >> periode_istirahat[i];
-        cin.ignore(); 
+                // Combine the checks into a single loop
+                for (int j = 0; j < MAX_ITEMS; j++) {
+                    // Check if the order number is already used and is a valid number (greater than 0)
+                    if (nomor_pesanan[j] > 0 && nomor_pesanan[j] == tempOrderNumber) {
+                        cout << "Nomor Pesanan " << tempOrderNumber << " sudah ada, silakan masukkan nomor lain." << endl;
+                        isUnique = false;
+                        break;
+                    }
+                }
+
+                // If the order number is still considered unique, check against newly entered numbers
+                if (isUnique) {
+                    for (int k = 0; k < i; k++) {
+                        if (nomor_pesanan[k] == tempOrderNumber) {
+                            cout << "Nomor Pesanan " << tempOrderNumber << " sudah ada, silakan masukkan nomor lain." << endl;
+                            isUnique = false;
+                            break;
+                        }
+                    }
+                }
+            } else {
+                cout << "Input tidak valid, silakan masukkan angka." << endl;
+                cin.clear();  // Clear error flag
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
+                isUnique = false;
+            }
+        } while (!isUnique);
+
+        nomor_pesanan[i] = tempOrderNumber; // Set the validated unique order number
+
+        // Validate menu item exists
+        bool menuFound = false;
+        while (true) {
+            cout << "Menu yang Dipesan: ";
+            getline(cin, menu_dipesan[i]);
+            if (!menu_dipesan[i].empty()) {
+                // Check if the menu exists in the list
+                for (int j = 0; j < MAX_ITEMS; j++) {
+                    if (nama_menu[j] == menu_dipesan[i]) {
+                        menuFound = true;  // Set the flag to true if menu is found
+                        break;
+                    }
+                }
+                if (menuFound) {
+                    break;  // Break the loop if the menu is found
+                } else {
+                    cout << "Menu " << menu_dipesan[i] << " tidak ditemukan, silakan coba lagi." << endl;
+                }
+            } else {
+                cout << "Nama menu tidak boleh kosong, silakan masukkan lagi." << endl;
+            }
+        }
+
+        // Validate order quantity
+        while (true) {
+            cout << "Jumlah Pesanan: ";
+            if (cin >> jumlah_pesanan[i] && jumlah_pesanan[i] > 0) {
+                bool validOrder = false;  // Flag to track if the order is valid
+                for (int j = 0; j < MAX_ITEMS; j++) {
+                    if (nama_menu[j] == menu_dipesan[i]) {  // Check if the menu matches
+                        if (jumlah_pesanan[i] > jumlah_stock[j]) {
+                            cout << "Jumlah pesanan melebihi stok yang tersedia, silakan input pesanan kurang dari stock tersedia (" << jumlah_stock[j] << " tersedia)." << endl;
+                        } else {
+                            validOrder = true;  // Set flag to true if order is valid
+                            break;  // Break the inner loop since a valid order quantity is found
+                        }
+                    }
+                }
+                if (validOrder) {
+                    cin.ignore();  // Clear the input buffer
+                    break;  // Break the outer loop if the order is valid
+                }
+            } else {
+                cout << "Jumlah pesanan harus lebih dari 0, silakan coba lagi." << endl;
+                cin.clear();  // Clear any error flags
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
+            }
+        }
+
+        // Validate break period
+        while (true) {
+            cout << "Periode Istirahat (1, 2, atau 3): ";
+            if (cin >> periode_istirahat[i] && (periode_istirahat[i] >= 1 && periode_istirahat[i] <= 3)) {
+                cin.ignore();
+                break;
+            } else {
+                cout << "Periode harus antara 1 dan 3, silakan coba lagi." << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
+        }
+
+        updatePenguranganStokOtomatis(menu_dipesan[i], jumlah_pesanan[i]);
 
         cout << endl;  // Mencetak baris kosong sebagai pemisah
     }
@@ -202,7 +292,7 @@ void lihatPesananPelanggan() {
     }
 }
 
-void lihatStatusStok() {
+void lihatStatusStokSaatIni() {
     cout << "Status Stock Saat Ini:" << endl;
 
     for (int i = 0; i < MAX_ITEMS; i++) {
@@ -254,14 +344,52 @@ void inputStokAwalPerMenu() { //! Butuh menambahkan validasi setiap inputan
 
     for (int i = 0; i < max_item_menus; i++) {
         cout << "Menu " << (i + 1) << ":" << endl;
-        cout << "Nama Menu: ";
-        getline(cin, nama_menu[i]);  // Menggunakan getline setelah cin.ignore()
 
-        cout << "Harga: ";
-        cin >> harga[i];
-        cout << "Jumlah Stok: ";
-        cin >> jumlah_stock[i];
-        cin.ignore(); 
+        // Validate menu name
+        while (true) {
+            cout << "Nama Menu: ";
+            getline(cin, nama_menu[i]);
+            if (!nama_menu[i].empty()) {
+                break;
+            } else {
+                cout << "Nama menu tidak boleh kosong, silakan masukkan lagi." << endl;
+            }
+        }
+
+        // Validate harga
+        while (true) {
+            cout << "Harga: ";
+            if (cin >> harga[i]) {
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+                if (harga[i] > 0) {
+                    break;
+                } else {
+                    cout << "Harga harus lebih dari 0, silakan coba lagi." << endl;
+                }
+            } else {
+                cout << "Input tidak valid, silakan masukkan angka." << endl;
+                cin.clear();  // Clear error flag
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
+            }
+        }
+
+        // Validate jumlah stok
+        while (true) {
+            cout << "Jumlah Stok: ";
+            if (cin >> jumlah_stock[i]) {
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+                if (jumlah_stock[i] >= 0) {
+                    break;
+                } else {
+                    cout << "Jumlah stok tidak boleh negatif, silakan coba lagi." << endl;
+                }
+            } else {
+                cout << "Input tidak valid, silakan masukkan angka." << endl;
+                cin.clear();  // Clear error flag
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
+            }
+        }
+
 
         status_menu[i] = "tidak siap"; // Inisialisasi menu status sebagai "tidak siap"
         waktu_persiapan[i] = 0;  // Inisialisasi waktu persiapan sebagai 0
@@ -269,10 +397,6 @@ void inputStokAwalPerMenu() { //! Butuh menambahkan validasi setiap inputan
 
         cout << endl;
     }
-}
-
-int updatePenguranganStokOtomatis() {
-    return 0;
 }
 
 void produksiMenu() {
