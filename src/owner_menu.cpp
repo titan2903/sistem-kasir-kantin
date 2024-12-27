@@ -12,14 +12,14 @@ void analisisMenu();
 
 //! Pengelolaan Jam Sibuk
 void hitungTotalPesananPerPeriodeIstirahat();
-void lihatStokMakananMenjelangIstirahat();
+void lihatStokMenuMenjelangIstirahat();
 
 //! Kapasitas Layanan
 void lihatRataRataWaktuLayananPerHari();
-void lihatJumlahPesananPerJenisMakanan();
+void lihatJumlahPesananPerJenisMenu();
 
 //! Kontrol Stok
-int updateStokMakananTersedia();
+int updateStokMenuTersedia();
 void lihatSisaStokPerMenu();
 
 //! Analisis Menu
@@ -126,7 +126,7 @@ void pengelolaanJamSibuk() {
     while (true) {
         cout << "\nPengelolaan Jam Sibuk:" << endl;
         cout << "1. Lihat total pesanan per periode istirahat" << endl;
-        cout << "2. Lihat stok makanan menjelang istirahat" << endl;
+        cout << "2. Lihat stok menu menjelang istirahat" << endl;
         cout << "3. Back to Rush Hour Management" << endl;
         cout << "Select an option: ";
         
@@ -137,7 +137,7 @@ void pengelolaanJamSibuk() {
                     hitungTotalPesananPerPeriodeIstirahat();
                     break;
                 case 2:
-                    lihatStokMakananMenjelangIstirahat();
+                    lihatStokMenuMenjelangIstirahat();
                     break;
                 case 3:
                     return;
@@ -154,6 +154,7 @@ void pengelolaanJamSibuk() {
 
 void hitungTotalPesananPerPeriodeIstirahat() {
     cout << "Total pesanan per periode istirahat:" << endl;
+
     int jam_istirahat = 0;
 
     while (true) {
@@ -182,8 +183,8 @@ void hitungTotalPesananPerPeriodeIstirahat() {
     cout << "Total pesanan per istirahat " << jam_istirahat << ": " << total_pesanan << " Pesanan" << endl;
 }
 
-void lihatStokMakananMenjelangIstirahat() {
-    cout << "Stock Makanan Menjelang Istirahat:" << endl;
+void lihatStokMenuMenjelangIstirahat() {
+    cout << "Stock Menu Menjelang Istirahat:" << endl;
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] != "") {
             cout << "Menu: " << nama_menu[i] << ", Jumlah Stock: " << jumlah_stock[i] << ", Harga: " <<  harga[i] << ", Status Menu: " << status_menu[i] << endl;
@@ -196,7 +197,7 @@ void kapasitasLayanan() {
     while (true) {
         cout << "\nKapasitas Layanan:" << endl;
         cout << "1. Lihat rata-rata waktu layanan per hari" << endl;
-        cout << "2. Lihat jumlah pesanan per jenis makanan" << endl;
+        cout << "2. Lihat jumlah pesanan per jenis menu" << endl;
         cout << "3. Back to Rush Hour Management" << endl;
         cout << "Select an option: ";
         
@@ -207,7 +208,7 @@ void kapasitasLayanan() {
                     lihatRataRataWaktuLayananPerHari();
                     break;
                 case 2:
-                    lihatJumlahPesananPerJenisMakanan();
+                    lihatJumlahPesananPerJenisMenu();
                     break;
                 case 3:
                     return;
@@ -234,15 +235,16 @@ void lihatRataRataWaktuLayananPerHari() {
     
     if (count > 0) {  // To avoid division by zero
         double rata_rata_waktu = static_cast<double>(total_waktu_layanan) / count;  // Calculate average
-        std::cout << "Rata-rata waktu layanan per hari: " << rata_rata_waktu << " Menit" << std::endl;
+        cout << "Rata-rata waktu layanan per hari: " << rata_rata_waktu << " Menit" << endl;
     } else {
-        std::cout << "Tidak ada item menu yang tersedia untuk menghitung waktu rata-rata." << std::endl;
+        cout << "Tidak ada item menu yang tersedia untuk menghitung waktu rata-rata." << endl;
     }
 
 }
 
-void lihatJumlahPesananPerJenisMakanan() {
-    cout << "Jumlah pesanan per jenis makanan:" << endl;
+void lihatJumlahPesananPerJenisMenu() {
+    cout << "Jumlah pesanan per jenis menu:" << endl;
+
     for (int i = 0; i < MAX_ITEMS; i++) {
         bool counted = false;
         for (int j = 0; j < i; j++) {
@@ -269,7 +271,7 @@ void kontrolStok() {
     int choice = 0;
     while (true) {
         cout << "\nKontrol Stok:" << endl;
-        cout << "1. Update stok makanan tersedia" << endl;
+        cout << "1. Update stok menu tersedia" << endl;
         cout << "2. Lihat sisa stok per menu" << endl;
         cout << "3. Back to Food Management" << endl;
         cout << "Select an option: ";
@@ -278,7 +280,7 @@ void kontrolStok() {
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
             switch (choice) {
                 case 1:
-                    updateStokMakananTersedia();
+                    updateStokMenuTersedia();
                     break;
                 case 2:
                     lihatSisaStokPerMenu();
@@ -296,10 +298,10 @@ void kontrolStok() {
     }
 }
 
-int updateStokMakananTersedia() {
-    //! Implement the functionality here
-    cout << "Update stok makanan tersedia:" << endl;
-    cout << "\nMakanan yang tersedia saat ini:" << endl;
+int updateStokMenuTersedia() {
+    cout << "Melakukan update stok menu tersedia:" << endl;
+
+    cout << "\nMenu yang tersedia saat ini:" << endl;
     for (int i = 0; i < MAX_ITEMS; i++)
     {
         if(nama_menu[i] != "") {
@@ -311,10 +313,10 @@ int updateStokMakananTersedia() {
     int jumlah;
 
     while(true) {
-        cout << "Masukkan nama menu yang akan diupdate stoknya: ";
+        cout << "Masukkan  yang akan diupdate stoknya: ";
         getline(cin, menu);
         if (menu == "") {
-            cout << "Nama menu tidak boleh kosong." << endl;
+            cout << " tidak boleh kosong." << endl;
         } else {
             break;
         }
@@ -342,14 +344,14 @@ int updateStokMakananTersedia() {
         if (nama_menu[i] == menu)
         {
             jumlah_stock[i] = jumlah;
-            cout << "Stok dengan Nama Menu " << menu << " berhasil diupdate menjadi " << jumlah << endl;
+            cout << "Stok dengan  " << menu << " berhasil diupdate menjadi " << jumlah << endl;
             found = true;
             break;
         }
     }
 
     if (!found) {
-        cout << "Nama Menu " << menu << " tidak ditemukan." << endl;
+        cout << " " << menu << " tidak ditemukan." << endl;
     }
 
     return 0;
@@ -357,6 +359,7 @@ int updateStokMakananTersedia() {
 
 void lihatSisaStokPerMenu() {
     cout << "Stok Per Menu saat ini:" << endl;
+
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] != "") {
             cout << "Menu: " << nama_menu[i] << ", Jumlah Stock: " << jumlah_stock[i] << endl;
@@ -397,6 +400,7 @@ void analisisMenu() {
 
 void lihatTotalPenjualanPerMenu() {
     cout << "Total penjualan per menu:" << endl;
+    
     for (int i = 0; i < MAX_ITEMS; i++) {
         if(nama_menu[i] != "") {
             cout << "Menu: " << nama_menu[i] << ", Total Penjualan: " << menu_terjual[i] << endl;
@@ -405,7 +409,7 @@ void lihatTotalPenjualanPerMenu() {
 }
 
 void lihatMenuYangPalingLakuPerHari() {
-    std::cout << "Menu yang paling laku per hari:" << std::endl;
+    cout << "Menu yang paling laku per hari:" << endl;
     
     int maxSales = menu_terjual[0];
     for (int i = 1; i < MAX_ITEMS; i++) {
@@ -416,7 +420,7 @@ void lihatMenuYangPalingLakuPerHari() {
 
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (menu_terjual[i] == maxSales) {
-            std::cout << nama_menu[i] << " - Terjual Sebanyak: " << menu_terjual[i] << std::endl;
+            cout << nama_menu[i] << " - Terjual Sebanyak: " << menu_terjual[i] << endl;
         }
     }
 }
