@@ -16,14 +16,14 @@
 - **Rush Hour Management:**
   - **Pengelolaan Jam Sibuk:**
     1. Saya ingin lihat total pesanan per periode istirahat.
-    2. Saya ingin lihat stok makanan menjelang istirahat.
+    2. Saya ingin lihat stok menu menjelang istirahat.
   - **Kapasitas Layanan:**
     1. Saya ingin lihat rata-rata waktu layanan per hari.
-    2. Saya ingin lihat jumlah pesanan per jenis makanan.
+    2. Saya ingin lihat jumlah pesanan per jenis menu.
 
 - **Food Management:**
   - **Kontrol Stok:**
-    1. Saya ingin update stok makanan tersedia.
+    1. Saya ingin update stok menu tersedia.
     2. Saya ingin lihat sisa stok per menu.
   - **Analisis Menu:**
     1. Saya ingin lihat total penjualan per menu.
