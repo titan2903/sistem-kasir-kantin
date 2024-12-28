@@ -161,22 +161,61 @@ void pengelolaanJamSibuk() {
 void melihatTotalPesananPerPeriodeIstirahat() {
     cout << "Melihat semua total pesanan per periode istirahat:" << endl;
 
-    int total_pesanan_periode_1 = 0;
-    int total_pesanan_periode_2 = 0;
-    int total_pesanan_periode_3 = 0;
+    // Array untuk menyimpan tanggal yang telah diproses
+    string processedDates[MAX_ITEMS];
+    int processedCount = 0;
+
+    // Array untuk menandai item yang sudah diproses
+    bool processed[MAX_ITEMS] = {false};
+
     for (int i = 0; i < MAX_ITEMS; i++) {
-        if (periode_istirahat[i] == 1) {
-            total_pesanan_periode_1 += jumlah_pesanan[i];
-        } else if (periode_istirahat[i] == 2) {
-            total_pesanan_periode_2 += jumlah_pesanan[i];
-        } else if (periode_istirahat[i] == 3) {
-            total_pesanan_periode_3 += jumlah_pesanan[i];
+        if (!processed[i]) {
+            struct tm *timeinfo = localtime(&waktu_pesan[i]);
+            char buffer[11];
+            strftime(buffer, 11, "%Y/%m/%d", timeinfo);
+            string tanggal(buffer);
+
+            // Cek apakah tanggal sudah diproses
+            bool isDateProcessed = false;
+            for (int k = 0; k < processedCount; k++) {
+                if (processedDates[k] == tanggal) {
+                    isDateProcessed = true;
+                    break;
+                }
+            }
+
+            if (!isDateProcessed) {
+                int total_pesanan_periode_1 = 0;
+                int total_pesanan_periode_2 = 0;
+                int total_pesanan_periode_3 = 0;
+
+                cout << "Tanggal: " << tanggal << endl;
+                for (int j = 0; j < MAX_ITEMS; j++) {
+                    if (waktu_pesan[j] == waktu_pesan[i]) {
+                        if (periode_istirahat[j] == 1) {
+                            total_pesanan_periode_1 += jumlah_pesanan[j];
+                        } else if (periode_istirahat[j] == 2) {
+                            total_pesanan_periode_2 += jumlah_pesanan[j];
+                        } else if (periode_istirahat[j] == 3) {
+                            total_pesanan_periode_3 += jumlah_pesanan[j];
+                        }
+                        processed[j] = true;
+                    }
+                }
+
+                cout << "Total pesanan periode istirahat 1: " << total_pesanan_periode_1 << " Pesanan" << endl;
+                cout << "Total pesanan periode istirahat 2: " << total_pesanan_periode_2 << " Pesanan" << endl;
+                cout << "Total pesanan periode istirahat 3: " << total_pesanan_periode_3 << " Pesanan" << endl;
+                cout << endl;
+
+                processedDates[processedCount++] = tanggal; // Tandai tanggal ini sudah diproses
+            }
         }
     }
 
-    cout << "Total pesanan periode istirahat 1: " << total_pesanan_periode_1 << " Pesanan" << endl;
-    cout << "Total pesanan periode istirahat 2: " << total_pesanan_periode_2 << " Pesanan" << endl;
-    cout << "Total pesanan periode istirahat 3: " << total_pesanan_periode_3 << " Pesanan" << endl;
+    if (processedCount == 0) {
+        cout << "Tidak ada data penjualan yang tersedia." << endl;
+    }
 }
 
 void hitungTotalPesananPerPeriodeIstirahat() {
