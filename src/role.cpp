@@ -26,7 +26,7 @@ int selectRole() {
             }
         } else {
             cout << "Input tidak valid. Harap masukkan angka." << endl;
-            cin.clear();  // Clear error flag
+            cin.clear();  
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
     }

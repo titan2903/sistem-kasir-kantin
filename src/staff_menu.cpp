@@ -60,7 +60,7 @@ void staffMenu() {
                 }
         } else {
             cout << "Input tidak valid, silakan masukkan angka." << endl;
-            cin.clear();  // Clear error flag
+            cin.clear();  
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
     }
@@ -91,7 +91,7 @@ void serviceOperation() {
                 }
         } else {
             cout << "Input tidak valid, silakan masukkan angka." << endl;
-            cin.clear();  // Clear error flag
+            cin.clear();  
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
     }
@@ -122,7 +122,7 @@ void kitchenOperation() {
                 }
         } else {
             cout << "Input tidak valid, silakan masukkan angka." << endl;
-            cin.clear();  // Clear error flag
+            cin.clear();  
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
     }
@@ -157,7 +157,7 @@ void prosesPenjualan() {
                 }
         } else {
             cout << "Input tidak valid, silakan masukkan angka." << endl;
-            cin.clear();  // Clear error flag
+            cin.clear();  
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
             
@@ -212,7 +212,7 @@ void inputPesananPelanggan() {
                 }
             } else {
                 cout << "Input tidak valid, silakan masukkan angka." << endl;
-                cin.clear();  // Clear error flag
+                cin.clear();  
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
                 isUnique = false;
             }
@@ -346,7 +346,7 @@ void persiapanMenu() {
             }
         } else {
             cout << "Input tidak valid, silakan masukkan angka." << endl;
-            cin.clear();  // Clear error flag
+            cin.clear();  
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
     }
@@ -398,7 +398,7 @@ void inputStokAwalPerMenu() { //! Butuh menambahkan validasi setiap inputan
                 }
             } else {
                 cout << "Input tidak valid, silakan masukkan angka." << endl;
-                cin.clear();  // Clear error flag
+                cin.clear();  
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
             }
         }
@@ -415,7 +415,7 @@ void inputStokAwalPerMenu() { //! Butuh menambahkan validasi setiap inputan
                 }
             } else {
                 cout << "Input tidak valid, silakan masukkan angka." << endl;
-                cin.clear();  // Clear error flag
+                cin.clear();  
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
             }
         }
@@ -468,7 +468,7 @@ void produksiMenu() {
             }
         } else {
             cout << "Input tidak valid, silakan masukkan angka." << endl;
-            cin.clear();  // Clear error flag
+            cin.clear();  
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
     }
@@ -511,7 +511,7 @@ void catatWaktuProduksiMenu() {
                     }
                 } else {
                     cout << "Input tidak valid, silakan masukkan angka." << endl;
-                    cin.clear();  // Clear error flag
+                    cin.clear();  
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
                 }
             }
@@ -587,7 +587,7 @@ void kontrolKualitas() {
             }
         } else {
             cout << "Input tidak valid, silakan masukkan angka." << endl;
-            cin.clear();  // Clear error flag
+            cin.clear();  
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
     }
