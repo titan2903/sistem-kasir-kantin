@@ -15,7 +15,7 @@ void updatePenambahanMenuTerjualOtomatis(const string& menu, int penambahan) {
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] == menu) {
             menu_terjual[i] += penambahan;
-            tanggal_terjual[i] = time(0);  // Set the sale time to the current time
+            tanggal_terjual[i] = time(0);
         }
     }
 }
