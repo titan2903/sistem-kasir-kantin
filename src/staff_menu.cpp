@@ -21,10 +21,13 @@ void lihatStatusStokSaatIni();
 
 //! Persiapan Menu
 void inputStokAwalPerMenu();
+void melihatStokMenuYangTelahTerdaftar();
 
 //! Produksi Menu
 void catatWaktuProduksiMenu();
 void melihatWaktuProduksiSetiapMenu();
+
+//! Feature (inputPorsiStandarPerMenu) di Tekeout Berdasarkan diskusi dengan Pak Hedy
 // void inputPorsiStandarPerMenu();
 
 //! Kontrol Kualitas
@@ -52,10 +55,10 @@ void staffMenu() {
                         cout << "Exiting Staff Menu." << endl;
                         return;
                     default:
-                        cout << "Invalid choice, please try again." << endl;
+                        cout << "Pilihan tidak valid, silakan coba lagi." << endl;
                 }
         } else {
-            cout << "Invalid input, please enter a number." << endl;
+            cout << "Input tidak valid, silakan masukkan angka." << endl;
             cin.clear();  // Clear error flag
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
@@ -83,10 +86,10 @@ void serviceOperation() {
                     case 3:
                         return;
                     default:
-                        cout << "Invalid choice, please try again." << endl;
+                        cout << "Pilihan tidak valid, silakan coba lagi." << endl;
                 }
         } else {
-            cout << "Invalid input, please enter a number." << endl;
+            cout << "Input tidak valid, silakan masukkan angka." << endl;
             cin.clear();  // Clear error flag
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
@@ -114,10 +117,10 @@ void kitchenOperation() {
                     case 3:
                         return;
                     default:
-                        cout << "Invalid choice, please try again." << endl;
+                        cout << "Pilihan tidak valid, silakan coba lagi." << endl;
                 }
         } else {
-            cout << "Invalid input, please enter a number." << endl;
+            cout << "Input tidak valid, silakan masukkan angka." << endl;
             cin.clear();  // Clear error flag
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
@@ -149,10 +152,10 @@ void prosesPenjualan() {
                     case 4:
                         return;
                     default:
-                        cout << "Invalid choice, please try again." << endl;
+                        cout << "Pilihan tidak valid, silakan coba lagi." << endl;
                 }
         } else {
-            cout << "Invalid input, please enter a number." << endl;
+            cout << "Input tidak valid, silakan masukkan angka." << endl;
             cin.clear();  // Clear error flag
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
@@ -223,12 +226,7 @@ void inputPesananPelanggan() {
             getline(cin, menu_dipesan[i]);
             if (!menu_dipesan[i].empty()) {
                 // Check if the menu exists in the list
-                for (int j = 0; j < MAX_ITEMS; j++) {
-                    if (nama_menu[j] == menu_dipesan[i]) {
-                        menuFound = true;  // Set the flag to true if menu is found
-                        break;
-                    }
-                }
+                menuFound = foundExistingMenuPesanan(menu_dipesan[i]);
                 if (menuFound) {
                     break;  // Break the loop if the menu is found
                 } else {
@@ -282,6 +280,7 @@ void inputPesananPelanggan() {
         waktu_pesan[i] = time(0);  // Set the order time to the current time
 
         updatePenguranganStokOtomatis(menu_dipesan[i], jumlah_pesanan[i]);
+        updatePenambahanMenuTerjualOtomatis(menu_dipesan[i], jumlah_pesanan[i]);
 
         cout << endl;  // Mencetak baris kosong sebagai pemisah
     }
@@ -290,20 +289,34 @@ void inputPesananPelanggan() {
 void lihatPesananPelanggan() {
     cout << "Pesanan Pelanggan:" << endl;
 
+    bool isPesananAvailable = false;
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (menu_dipesan[i] != "") {
-            cout << "Nomor Pesanan: " << nomor_pesanan[i] << ", Menu Dipesan: " << menu_dipesan[i] << ", Jumlah Pesanan: " << jumlah_pesanan[i] << ", Periode Istirahat: " << periode_istirahat[i] << ", Status Pesanan: " << status_menu[i] << ", Waktu Pesan: " << waktu_pesan[i] << endl;
+            cout << "Nomor Pesanan: " << nomor_pesanan[i] << ", Menu Dipesan: " << menu_dipesan[i] << ", Jumlah Pesanan: " << jumlah_pesanan[i] << ", Periode Istirahat: " << periode_istirahat[i] << ", Status Pesanan: " << status_menu[i] << ", Waktu Pesan: " << ctime(&waktu_pesan[i]) << endl;
+            isPesananAvailable = true;
         }
+    }
+
+    if (!isPesananAvailable) {
+        cout << "Tidak ada pesanan yang tersedia." << endl;
+        return;
     }
 }
 
 void lihatStatusStokSaatIni() {
     cout << "Status Stock Saat Ini:" << endl;
 
+    bool isMenuAvailable = false;
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] != "") {
             cout << "Menu: " << nama_menu[i] << ", Jumlah: " << jumlah_stock[i] << ", Menu Terjual: " << menu_terjual[i] << endl;
+            isMenuAvailable = true;
         }
+    }
+
+    if (!isMenuAvailable) {
+        cout << "Tidak ada data stock menu yang tersedia." << endl;
+        return;
     }
 }
 
@@ -312,7 +325,8 @@ void persiapanMenu() {
     while (true) {
         cout << "\nPersiapan Menu Options:" << endl;
         cout << "1. Input stok awal per menu" << endl;
-        cout << "2. Back to Service Operation" << endl;
+        cout << "2. Melihat stock yang telah terdaftar" << endl;
+        cout << "3. Back to Service Operation" << endl;
         cout << "Select an option: ";
         
         if (cin >> choice) {
@@ -322,12 +336,15 @@ void persiapanMenu() {
                     inputStokAwalPerMenu();
                     break;
                 case 2:
+                    melihatStokMenuYangTelahTerdaftar();
+                    break;
+                case 3:
                     return;
                 default:
-                    cout << "Invalid choice, please try again." << endl;
+                    cout << "Pilihan tidak valid, silakan coba lagi." << endl;
             }
         } else {
-            cout << "Invalid input, please enter a number." << endl;
+            cout << "Input tidak valid, silakan masukkan angka." << endl;
             cin.clear();  // Clear error flag
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
@@ -351,11 +368,18 @@ void inputStokAwalPerMenu() { //! Butuh menambahkan validasi setiap inputan
         cout << "Menu " << (i + 1) << ":" << endl;
 
         // Validate menu name
+        bool isUnique = true;
         while (true) {
             cout << "Nama Menu: ";
             getline(cin, nama_menu[i]);
             if (!nama_menu[i].empty()) {
-                break;
+                isUnique = foundExistingStockMenu(nama_menu[i]);
+                if (isUnique) {
+                    cout << "Menu " << nama_menu[i] << " sudah ada, silakan masukkan nama lain." << endl;
+                } else {
+                    nama_menu_terdaftar[i] = nama_menu[i];
+                    break;
+                }
             } else {
                 cout << "Nama menu tidak boleh kosong, silakan masukkan lagi." << endl;
             }
@@ -396,8 +420,26 @@ void inputStokAwalPerMenu() { //! Butuh menambahkan validasi setiap inputan
         }
 
         menu_terjual[i] = 0;  // Inisialisasi menu terjual sebagai 0
+        tanggal_dibuat[i] = time(0);  // Set the creation time to the current time
 
         cout << endl;
+    }
+}
+
+void melihatStokMenuYangTelahTerdaftar() {
+    cout << "Stok Menu saat ini:" << endl;
+
+    bool isMenuAvailable = false;
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        if (nama_menu[i] != "") {
+            cout << "Menu: " << nama_menu[i] <<", Harga: " << harga[i] << ", Jumlah Stock: " << jumlah_stock[i] << ", Terjual: " << menu_terjual[i] << ", Tanggal Dibuat: " << ctime(&tanggal_dibuat[i]) << endl;
+            isMenuAvailable = true;
+        }
+    }
+
+    if (!isMenuAvailable) {
+        cout << "Tidak ada menu yang tersedia." << endl;
+        return;
     }
 }
 
@@ -409,7 +451,6 @@ void produksiMenu() {
         cout << "2. Melihat waktu produksi setiap menu" << endl;
         cout << "3. Back to Kitchen Operation" << endl;
         cout << "Select an option: ";
-        // cout << "2. Input porsi standar per menu" << endl;
         
         if (cin >> choice) {
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input 
@@ -422,10 +463,10 @@ void produksiMenu() {
                 case 3:
                     return;
                 default:
-                    cout << "Invalid choice, please try again." << endl;
+                    cout << "Pilihan tidak valid, silakan coba lagi." << endl;
             }
         } else {
-            cout << "Invalid input, please enter a number." << endl;
+            cout << "Input tidak valid, silakan masukkan angka." << endl;
             cin.clear();  // Clear error flag
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
@@ -435,15 +476,17 @@ void produksiMenu() {
 void catatWaktuProduksiMenu() {
     cout << "Mencatat Waktu Produksi Menu:" << endl;
 
+    int data_pesanan = 0;
     cout << "\nList menu pesanan yang belum memiliki Waktu Produksi:" << endl;
     for (int i = 0; i < MAX_ITEMS; i++) {
-        if (waktu_persiapan[i] == 0 && status_menu[i] == STATUS_SIAP) {
-            cout << "Menu " << menu_dipesan[i] << ", Waktu Produksi: " << waktu_persiapan[i] << endl;
+        if (waktu_produksi[i] == 0 && status_menu[i] == STATUS_SIAP) {
+            cout << "Nomor Pesanan: " << nomor_pesanan[i] << ", Menu " << menu_dipesan[i] << ", Waktu Produksi: " << waktu_produksi[i] << endl;
+            data_pesanan++;
         }
     }
     cout << endl;  // Print a blank line as a separator
 
-    string nama_menu_pesanan;
+    int input_nomor_pesanan;
 
     // !Dummy data deleted SOON
     // Simpan waktu saat ini ke 'awal'
@@ -452,31 +495,45 @@ void catatWaktuProduksiMenu() {
     // Tambahkan selisih waktu ke 'akhir' (misalnya, tambahkan 900 detik atau 15 menit)
     akhir = awal + 900;  // 15 menit kemudian
 
-    bool isUpdated = false;
-    while (!isUpdated) {
-        cout << "Input Nama Menu yang akan dicatat waktu persiapannya: ";
-        getline(cin, nama_menu_pesanan);
-        if (!nama_menu_pesanan.empty()) {
-            for (int i = 0; i < MAX_ITEMS; i++) {
-                if (menu_dipesan[i] == nama_menu_pesanan && status_menu[i] == STATUS_SIAP) {
-                    if (waktu_persiapan[i] > 0) {
-                        cout << "Waktu Persiapan untuk " << nama_menu_pesanan << " sudah dicatat sebelumnya." << endl;
+    if(data_pesanan > 0) {
+        bool isUpdated = false;
+        while (!isUpdated) {
+            cout << "Input Nomor Pesanan yang akan dicatat waktu produksinya: ";
+            while (true) {
+                cout << "Jumlah Stok: ";
+                if (cin >> input_nomor_pesanan) {
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+                    if (input_nomor_pesanan > 0) {
+                        break;
+                    } else {
+                        cout << "Nomor pesanan harus diatas 0, silakan coba lagi." << endl;
+                    }
+                } else {
+                    cout << "Input tidak valid, silakan masukkan angka." << endl;
+                    cin.clear();  // Clear error flag
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
+                }
+            }
+
+            if (input_nomor_pesanan > 0) {
+                for (int i = 0; i < MAX_ITEMS; i++) {
+                    if (nomor_pesanan[i] == input_nomor_pesanan && status_menu[i] == STATUS_SIAP && waktu_produksi[i] == 0) {
+                        // waktu_produksi[i] = calculateTimeDifferenceInMinutes(waktu_selesai[i], waktu_pesan[i]);
+                        waktu_produksi[i] = calculateTimeDifferenceInMinutes(akhir, awal);
+                        cout << "Waktu Produksi untuk " << menu_dipesan[i] << " diperbarui menjadi " << waktu_produksi[i] << " menit." << endl;
                         isUpdated = true;
                         break;
                     }
-                    // waktu_persiapan[i] = calculateTimeDifferenceInMinutes(waktu_selesai[i], waktu_pesan[i]);
-                    waktu_persiapan[i] = calculateTimeDifferenceInMinutes(akhir, awal);
-                    cout << "Waktu Persiapan untuk " << nama_menu_pesanan << " diperbarui menjadi " << waktu_persiapan[i] << " menit." << endl;
-                    isUpdated = true;
-                    break;
                 }
+                if (!isUpdated) {
+                    cout << "Nomor Pesanan " << input_nomor_pesanan << " tidak ditemukan, tidak siap atau waktu produksi sudah ditentukan, silakan coba lagi." << endl;
+                }
+            } else {
+                cout << "Nomor menu tidak boleh minus atau 0, silakan masukkan lagi." << endl;
             }
-            if (!isUpdated) {
-                cout << "Pesanan Menu " << nama_menu_pesanan << " tidak ditemukan atau tidak siap, silakan coba lagi." << endl;
-            }
-        } else {
-            cout << "Nama menu tidak boleh kosong, silakan masukkan lagi." << endl;
         }
+    } else {
+        cout << "Tidak ada data pesanan yang bisa dicatat waktu produksinya." << endl;
     }
     
 }
@@ -484,14 +541,22 @@ void catatWaktuProduksiMenu() {
 void melihatWaktuProduksiSetiapMenu() {
     cout << "Waktu Produksi Setiap Menu:" << endl;
 
+    bool isMenuAvailable = false;
+
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (status_menu[i] == STATUS_SIAP) {
-            cout << "Menu: " << menu_dipesan[i] << ", Waktu Persiapan: " << waktu_persiapan[i] << " menit" << endl;
+            cout << "Menu: " << menu_dipesan[i] << ", Waktu Produksi: " << waktu_produksi[i] << " menit" << endl;
+            isMenuAvailable = true;
         }
+    }
+
+    if(!isMenuAvailable) {
+        cout << "Tidak ada data pesanan yang siap untuk diproduksi." << endl;
+        return;
     }
 }
 
-//! Feature di Tekeout
+//! Feature (inputPorsiStandarPerMenu) di Tekeout Berdasarkan diskusi dengan Pak Hedy
 // void inputPorsiStandarPerMenu() {
 //     cout << "Input Posi Standart Per Menu:" << endl;
 // }
@@ -513,10 +578,10 @@ void kontrolKualitas() {
                 case 2:
                     return;
                 default:
-                    cout << "Invalid choice, please try again." << endl;
+                    cout << "Pilihan tidak valid, silakan coba lagi." << endl;
             }
         } else {
-            cout << "Invalid input, please enter a number." << endl;
+            cout << "Input tidak valid, silakan masukkan angka." << endl;
             cin.clear();  // Clear error flag
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }
@@ -524,11 +589,14 @@ void kontrolKualitas() {
 }
 
 void checklistMenuSiapJual() {
-    cout << "Melakukan Update Status Menu Siap Dijual:" << endl;
+    cout << "Melakukan Checklist Menu Siap Dijual:" << endl;
+
+    bool isMenuAvailable = false;
 
     for(int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] != "") {
             if (status_menu[i] == STATUS_TIDAK_SIAP) {
+                isMenuAvailable = true;
                 cout << "Menu " << nama_menu[i] << " belum siap dijual." << endl;
                 cout << "Apakah menu " << nama_menu[i] << " sudah siap dijual? (y/n): ";
                 string choice;
@@ -552,5 +620,10 @@ void checklistMenuSiapJual() {
                 }
             }
         }
+    }
+
+    if (!isMenuAvailable) {
+        cout << "Tidak ada menu yang perlu di Checklist." << endl;
+        return;
     }
 }

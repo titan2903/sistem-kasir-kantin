@@ -3,11 +3,11 @@
 using namespace std;
 
 int selectRole() {
-    cout << "+++++++++++++++++++++++++++++++++++++++++++++++" << endl;
-    cout << "                                               " << endl;
-    cout << " Welcome and Please Select Your Role!          " << endl;
-    cout << "                                               " << endl;
-    cout << "===============================================" << endl;
+    cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
+    cout << "                                                   " << endl;
+    cout << "Selamat Datang dan Tolong Pilih Role Mu!           " << endl;
+    cout << "                                                   " << endl;
+    cout << "===================================================" << endl;
 
     int choice = 0;
     while (true) {
@@ -22,10 +22,10 @@ int selectRole() {
             if (choice >= 1 && choice <= 3) {
                 return choice;
             } else {
-                cout << "Invalid choice. Please try again." << endl;
+                cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
             }
         } else {
-            cout << "Invalid input. Please enter a number." << endl;
+            cout << "Input tidak valid. Harap masukkan angka." << endl;
             cin.clear();  // Clear error flag
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
         }

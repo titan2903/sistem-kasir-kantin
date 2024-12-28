@@ -16,7 +16,7 @@ int main() {
                 staffMenu();
                 break;
             case 3:
-                cout << "Thank You for Using Our Cashier System." << endl;
+                cout << "Terimakasih Telah Menggunakan Sistem Kasir Kami." << endl;
                 return 0;
             default:
                 break;

@@ -50,7 +50,7 @@
     1. Saya ingin checklist menu siap jual:
        - Nama menu.
        - Status siap.
-       - Waktu persiapan.
+       - Waktu persiapan / produksi.
 
 ## Flow Navigasi Sistem Kasir untuk Kantin
 
