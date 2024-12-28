@@ -30,6 +30,7 @@ int menu_terjual[MAX_ITEMS] = {
     300, 250, 230, 210, 200
 };
 time_t tanggal_dibuat[MAX_ITEMS];
+time_t tanggal_terjual[MAX_ITEMS];
 
 //! Pesanan pelanggan
 int nomor_pesanan[MAX_ITEMS] = {101, 102, 103, 104, 105, 106, 107, 108, 109, 110};
@@ -37,7 +38,7 @@ string menu_dipesan[MAX_ITEMS] = {
     "Pizza", "Burger", "Pasta", "Salad", "Soup",
     "Steak", "Fish & Chips", "Chicken Wings", "Sushi", "Pizza"
 };
-int jumlah_pesanan[MAX_ITEMS] = {50, 20, 15, 5, 10, 25, 30, 5, 15, 10};  // Existing sample data
+int jumlah_pesanan[MAX_ITEMS] = {50, 20, 15, 5, 10, 25, 30, 5, 15, 20};  // Existing sample data
 int periode_istirahat[MAX_ITEMS] = {1, 2, 1, 3, 2, 1, 3, 2, 3, 1};  // Existing sample data
 string status_menu[MAX_ITEMS] = {
     "siap", "siap", "tidak siap", "siap", "siap",

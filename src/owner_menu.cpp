@@ -1,6 +1,7 @@
 #include <iostream>
 #include <limits>
 #include "../includes/menu_data.h"
+#include "../includes/helper.h"
 using namespace std;
 
 void rushHourManagement();
@@ -264,20 +265,54 @@ void kapasitasLayanan() {
 void lihatRataRataWaktuLayananPerHari() {
     int total_waktu_layanan = 0;
     int count = 0;
+
+    string arr_tanggal[MAX_ITEMS];
+    int waktu_layanan[MAX_ITEMS];
+    bool visited[MAX_ITEMS] = {false};
+
+    bool isDataAvailable = false;
+    
     for (int i = 0; i < MAX_ITEMS; i++) {
-        if (nama_menu[i] != "") {
-            total_waktu_layanan += waktu_produksi[i];
-            count += 1;  
+        if (nama_menu[i] != "" && waktu_pesan[i] != 0 && waktu_selesai[i] != 0) {
+            cout << "waktu pesan: " << ctime(&waktu_pesan[i]) << endl;
+            struct tm *timeinfo = localtime(&waktu_pesan[i]);
+            char buffer[11];
+            strftime(buffer, 11, "%Y/%m/%d", timeinfo); // Format tanggal menjadi yyyy/mm/dd
+            string tanggal(buffer);
+
+            cout << "tanggal: " << tanggal << endl;
+            arr_tanggal[i] = tanggal;
+            waktu_layanan[i] = calculateTimeDifferenceInMinutes(waktu_selesai[i], waktu_pesan[i]);
+            isDataAvailable = true;
         }
     }
-    
-    if (count > 0) {  // To avoid division by zero
-        double rata_rata_waktu = static_cast<double>(total_waktu_layanan) / count;  // Calculate average
-        cout << "Rata-rata waktu layanan per hari: " << rata_rata_waktu << " Menit" << endl;
-    } else {
-        cout << "Tidak ada item menu yang tersedia untuk menghitung waktu rata-rata." << endl;
+
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        if (!arr_tanggal[i].empty() && !visited[i]) {
+            int total_waktu = 0;
+            int count = 0;
+            for (int j = 0; j < MAX_ITEMS; j++) {
+                if (arr_tanggal[i] == arr_tanggal[j] && !arr_tanggal[j].empty()) {
+                    total_waktu += waktu_layanan[j];
+                    count++;
+                    visited[j] = true; // Mark this date as visited
+                }
+            }
+
+            if (count > 0) {
+                double rata_rata_waktu = static_cast<double>(total_waktu) / count;
+                cout << "Rata Rata waktu layanan tanggal " << arr_tanggal[i] << " adalah " << rata_rata_waktu << " menit" << endl;
+            } else {
+                cout << "Tidak ada data waktu layanan yang tersedia." << endl;
+                return;
+            }
+        }
     }
 
+    if (!isDataAvailable) {
+        cout << "Tidak ada data waktu layanan yang tersedia." << endl;
+        return;
+    }
 }
 
 void lihatJumlahPesananPerJenisMenu() {
@@ -408,8 +443,7 @@ void updateStokMenuTersedia() {
     }
 
     bool found = false;
-    for (int i = 0; i < MAX_ITEMS; i++)
-    {
+    for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] == menu)
         {
             jumlah_stock[i] = jumlah;
@@ -492,10 +526,15 @@ void lihatTotalPenjualanPerMenu() {
 
 void lihatMenuYangPalingLakuPerHari() {
     cout << "Menu yang paling laku per hari:" << endl;
-    
-    bool isMenuAvailable = false;
-    int maxSales = menu_terjual[0];
 
+    // Array untuk menyimpan tanggal yang telah diproses
+    string processedDates[MAX_ITEMS];
+    int processedCount = 0;
+
+    // Array untuk menandai item yang sudah diproses
+    bool processed[MAX_ITEMS] = {false};
+
+    int maxSales = menu_terjual[0];
     for (int i = 1; i < MAX_ITEMS; i++) {
         if (menu_terjual[i] > maxSales) {
             maxSales = menu_terjual[i];
@@ -503,14 +542,43 @@ void lihatMenuYangPalingLakuPerHari() {
     }
 
     for (int i = 0; i < MAX_ITEMS; i++) {
-        if (menu_terjual[i] == maxSales) {
-            cout << "Menu: " << nama_menu[i] << ", Terjual Sebanyak: " << menu_terjual[i] << endl;
-            isMenuAvailable = true;
+        if (!nama_menu[i].empty() && !processed[i]) {
+            struct tm *timeinfo = localtime(&tanggal_terjual[i]);
+            char buffer[11];
+            strftime(buffer, 11, "%Y/%m/%d", timeinfo);
+            string tanggal(buffer);
+
+            // Cek apakah tanggal sudah diproses
+            bool isDateProcessed = false;
+            for (int k = 0; k < processedCount; k++) {
+                if (processedDates[k] == tanggal) {
+                    isDateProcessed = true;
+                    break;
+                }
+            }
+
+            if (!isDateProcessed) {
+                cout << "Tanggal: " << tanggal << endl;
+                for (int j = i; j < MAX_ITEMS; j++) {
+                    if (!nama_menu[j].empty() && maxSales == menu_terjual[j]) {
+                        struct tm *compareTimeinfo = localtime(&tanggal_terjual[j]);
+                        char compareBuffer[11];
+                        strftime(compareBuffer, 11, "%Y/%m/%d", compareTimeinfo);
+                        string compareDate(compareBuffer);
+
+                        if (tanggal == compareDate) {
+                            cout << "Menu: " << nama_menu[j] << ", Terjual Sebanyak: " << menu_terjual[j] << endl;
+                            processed[j] = true;
+                        }
+                    }
+                }
+                processedDates[processedCount++] = tanggal; // Tandai tanggal ini sudah diproses
+                cout << endl;
+            }
         }
     }
 
-    if (!isMenuAvailable) {
+    if (processedCount == 0) {
         cout << "Tidak ada data penjualan yang tersedia." << endl;
-        return;
     }
 }

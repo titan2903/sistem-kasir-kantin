@@ -12,6 +12,7 @@ extern int harga[MAX_ITEMS];
 extern int jumlah_stock[MAX_ITEMS];
 extern int menu_terjual[MAX_ITEMS];
 extern time_t tanggal_dibuat[MAX_ITEMS];
+extern time_t tanggal_terjual[MAX_ITEMS];
 
 // Pesanan pelanggan
 extern int nomor_pesanan[MAX_ITEMS];

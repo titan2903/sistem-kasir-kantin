@@ -15,6 +15,7 @@ void updatePenambahanMenuTerjualOtomatis(const string& menu, int penambahan) {
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] == menu) {
             menu_terjual[i] += penambahan;
+            tanggal_terjual[i] = time(0);  // Set the sale time to the current time
         }
     }
 }
@@ -42,7 +43,7 @@ bool foundExistingStockMenu(const string& menu) {
 }
 
 int calculateTimeDifferenceInMinutes(time_t akhir, time_t awal) {
-    cout << "Waktu selesai: " << ctime(&akhir);
-    cout << "Waktu pesan: " << ctime(&awal);
+    // cout << "Waktu selesai: " << ctime(&akhir);
+    // cout << "Waktu pesan: " << ctime(&awal);
     return difftime(akhir, awal) / 60;
 }

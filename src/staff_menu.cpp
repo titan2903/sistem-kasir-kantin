@@ -32,6 +32,7 @@ void melihatWaktuProduksiSetiapMenu();
 
 //! Kontrol Kualitas
 void checklistMenuSiapJual();
+void melihatMenuTerchecklist();
 
 void staffMenu() {
     int choice = 0;
@@ -565,8 +566,9 @@ void kontrolKualitas() {
     int choice = 0;
     while (true) {
         cout << "\nKontrol Kualitas Options:" << endl;
-        cout << "1. Checklist menu siap jual" << endl;
-        cout << "2. Back to Kitchen Operation" << endl;
+        cout << "1. Checklist menu siap dijual / disajikan" << endl;
+        cout << "2. Melihat menu yang sudah di checklist" << endl;
+        cout << "3. Back to Kitchen Operation" << endl;
         cout << "Select an option: ";
         
         if (cin >> choice) {
@@ -576,6 +578,9 @@ void kontrolKualitas() {
                     checklistMenuSiapJual();
                     break;
                 case 2:
+                    melihatMenuTerchecklist();
+                    break;
+                case 3:
                     return;
                 default:
                     cout << "Pilihan tidak valid, silakan coba lagi." << endl;
@@ -589,16 +594,16 @@ void kontrolKualitas() {
 }
 
 void checklistMenuSiapJual() {
-    cout << "Melakukan Checklist Menu Siap Dijual:" << endl;
+    cout << "Melakukan Checklist Menu Siap Dijual atau Disajikan:" << endl;
 
     bool isMenuAvailable = false;
 
     for(int i = 0; i < MAX_ITEMS; i++) {
-        if (nama_menu[i] != "") {
+        if (menu_dipesan[i] != "") {
             if (status_menu[i] == STATUS_TIDAK_SIAP) {
                 isMenuAvailable = true;
-                cout << "Menu " << nama_menu[i] << " belum siap dijual." << endl;
-                cout << "Apakah menu " << nama_menu[i] << " sudah siap dijual? (y/n): ";
+                cout << "Menu " << menu_dipesan[i] << " belum siap dijual atau disajikan." << endl;
+                cout << "Apakah menu " << menu_dipesan[i] << " sudah siap dijual atau disajikan? (y/n): ";
                 string choice;
 
                 cin >> choice;
@@ -607,16 +612,16 @@ void checklistMenuSiapJual() {
                         break;
                     } else {
                         cout << "Pilihan tidak valid, silakan masukkan 'y' atau 'n'." << endl;
-                        cout << "Apakah menu " << nama_menu[i] << " sudah siap dijual? (y/n): ";
+                        cout << "Apakah menu " << menu_dipesan[i] << " sudah siap dijual atau disajikan? (y/n): ";
                         cin >> choice;
                     }
                 }
                 if (choice == "y") {
                     status_menu[i] = STATUS_SIAP;
                     waktu_selesai[i] = time(0); // Set the completion time to the current time
-                    cout << "Status menu " << nama_menu[i] << " telah diubah menjadi 'siap' dijual." << endl;
+                    cout << "Status menu " << menu_dipesan[i] << " telah diubah menjadi 'siap' dijual atau disajikan." << endl;
                 } else {
-                    cout << "Status menu " << nama_menu[i] << " tetap 'tidak siap' dijual." << endl;
+                    cout << "Status menu " << menu_dipesan[i] << " tetap 'tidak siap' dijual atau disajikan." << endl;
                 }
             }
         }
@@ -625,5 +630,22 @@ void checklistMenuSiapJual() {
     if (!isMenuAvailable) {
         cout << "Tidak ada menu yang perlu di Checklist." << endl;
         return;
+    }
+}
+
+
+void melihatMenuTerchecklist() {
+    cout << "List menu yang sudah siap" << endl;
+
+    bool isMenuAvailable = false;
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        if (menu_dipesan[i] != "" && status_menu[i] == STATUS_SIAP) {
+            cout << "Menu: " << menu_dipesan[i] << ", Status Menu: " << status_menu[i] << ", Waktu Siap: " << ctime(&waktu_selesai[i]);
+            isMenuAvailable = true;
+        }
+    }
+
+    if (!isMenuAvailable) {
+        cout << "Tidak ada menu yang tersedia." << endl;
     }
 }
