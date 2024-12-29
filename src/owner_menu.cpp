@@ -487,7 +487,7 @@ void updateStokMenuTersedia() {
         if (nama_menu[i] == menu)
         {   
             jumlah_stock[i] += jumlah;
-            cout << "Stok dengan Menu " << menu << " berhasil ditambahkan menjadi " << jumlah << endl;
+            cout << "Stok dengan Menu " << menu << " berhasil ditambahkan menjadi " << jumlah_stock[i] << endl;
             found = true;
         }
     }
