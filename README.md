@@ -127,7 +127,7 @@ g++ --version
 1. **Clone Repository:**
 
    ```bash
-   https://github.com/titan2903/sistem-kasir-kantin.git
+   git clone https://github.com/titan2903/sistem-kasir-kantin.git
    ```
 
 2. **Run System Application:**
