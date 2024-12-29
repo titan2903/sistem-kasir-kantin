@@ -587,7 +587,6 @@ void catatWaktuProduksiMenu() {
                 for (int i = 0; i < MAX_ITEMS; i++) {
                     if (nomor_pesanan[i] == input_nomor_pesanan && status_menu[i] == STATUS_SIAP && waktu_produksi[i] == 0) {
                         waktu_produksi[i] = calculateTimeDifferenceInMinutes(waktu_selesai[i], waktu_pesan[i]);
-                        // waktu_produksi[i] = calculateTimeDifferenceInMinutes(akhir, awal);
                         cout << "Waktu Produksi untuk " << menu_dipesan[i] << " diperbarui menjadi " << waktu_produksi[i] << " Menit." << endl;
                         isUpdated = true;
                         break;
