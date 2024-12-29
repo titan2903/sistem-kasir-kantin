@@ -160,14 +160,11 @@ void pengelolaanJamSibuk() {
 void melihatTotalPesananPerPeriodeIstirahat() {
     cout << "\nMelihat semua total pesanan per periode istirahat:" << endl;
 
-    // Array untuk menyimpan tanggal yang telah diproses
     string processedDates[MAX_ITEMS];
     int processedCount = 0;
-
-    // Array untuk menandai item yang sudah diproses
     bool processed[MAX_ITEMS] = {false};
-
     bool isDataAvailable = false;
+
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (!processed[i] && waktu_pesan[i] != 0) {
             struct tm *timeinfo = localtime(&waktu_pesan[i]);
@@ -175,7 +172,6 @@ void melihatTotalPesananPerPeriodeIstirahat() {
             strftime(buffer, 11, "%Y/%m/%d", timeinfo);
             string tanggal(buffer);
 
-            // Cek apakah tanggal sudah diproses
             bool isDateProcessed = false;
             for (int k = 0; k < processedCount; k++) {
                 if (processedDates[k] == tanggal) {
@@ -185,31 +181,30 @@ void melihatTotalPesananPerPeriodeIstirahat() {
             }
 
             if (!isDateProcessed) {
-                int total_pesanan_periode_1 = 0;
-                int total_pesanan_periode_2 = 0;
-                int total_pesanan_periode_3 = 0;
+                int total_pesanan_periode[4] = {0}; // Array untuk menampung total pesanan per periode
 
                 for (int j = 0; j < MAX_ITEMS; j++) {
-                    if(waktu_pesan[j] != 0) {
-                        if (waktu_pesan[j] == waktu_pesan[i]) {
-                            if (periode_istirahat[j] == 1) {
-                                total_pesanan_periode_1 += jumlah_pesanan[j];
-                            } else if (periode_istirahat[j] == 2) {
-                                total_pesanan_periode_2 += jumlah_pesanan[j];
-                            } else if (periode_istirahat[j] == 3) {
-                                total_pesanan_periode_3 += jumlah_pesanan[j];
+                    if (waktu_pesan[j] != 0 && !processed[j]) {
+                        struct tm *compareTime = localtime(&waktu_pesan[j]);
+                        char compareBuffer[11];
+                        strftime(compareBuffer, 11, "%Y/%m/%d", compareTime);
+                        string compareDate(compareBuffer);
+
+                        if (compareDate == tanggal) {
+                            if (periode_istirahat[j] >= 0 && periode_istirahat[j] <= 3) {
+                                total_pesanan_periode[periode_istirahat[j]] += jumlah_pesanan[j];
+                                processed[j] = true;
+                                isDataAvailable = true;
                             }
-                            processed[j] = true;
-                            isDataAvailable = true;
                         }
                     }
                 }
 
-                if(isDataAvailable) {
+                if (isDataAvailable) {
                     cout << "Tanggal: " << tanggal << endl;
-                    cout << "Total pesanan periode istirahat 1: " << total_pesanan_periode_1 << " Pesanan" << endl;
-                    cout << "Total pesanan periode istirahat 2: " << total_pesanan_periode_2 << " Pesanan" << endl;
-                    cout << "Total pesanan periode istirahat 3: " << total_pesanan_periode_3 << " Pesanan" << endl;
+                    for (int p = 1; p <= 3; p++) {
+                        cout << "Total pesanan periode istirahat " << p << ": " << total_pesanan_periode[p] << " Pesanan" << endl;
+                    }
                     cout << endl;
 
                     processedDates[processedCount++] = tanggal;
@@ -218,7 +213,7 @@ void melihatTotalPesananPerPeriodeIstirahat() {
         }
     }
 
-    if (processedCount == 0) {
+    if (!isDataAvailable) {
         cout << "Tidak ada data penjualan yang tersedia." << endl;
     }
 }
@@ -265,7 +260,12 @@ void lihatStokMenuMenjelangIstirahat() {
     bool isMenuAvailable = false;
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] != "") {
-            cout << "Menu: " << nama_menu[i] << ", Jumlah Stock: " << jumlah_stock[i] << ", Harga: " <<  harga[i] << ", Tanggal Dibuat: " << ctime(&tanggal_dibuat[i]) << endl;
+            cout << "Detail Menu:" << endl
+            << "  Nama Menu: " << nama_menu[i] << endl
+            << "  Jumlah Stock: " << jumlah_stock[i] << endl
+            << "  Harga: Rp" << harga[i] << endl
+            << "  Tanggal Dibuat: " << ctime(&tanggal_dibuat[i]) << endl;
+            cout << endl;
             isMenuAvailable = true;
         }
     }
@@ -356,7 +356,6 @@ void lihatRataRataWaktuLayananPerHari() {
 
     if (!isDataAvailable) {
         cout << "Tidak ada data waktu layanan yang tersedia." << endl;
-        return;
     }
 }
 
@@ -380,21 +379,26 @@ void lihatJumlahPesananPerJenisMenu() {
         if (counted) continue;
 
         int total_pesanan = 0;
+        double total_pendapatan = 0;
         for (int k = 0; k < MAX_ITEMS; k++) {
             if (menu_dipesan[i] == menu_dipesan[k]) {
                 total_pesanan += jumlah_pesanan[k];
+                total_pendapatan += total_harga[k];
                 isMenuAvailable = true;
             }
         }
 
         if(isMenuAvailable) {
-            cout << "Menu: " << menu_dipesan[i] << ", Jumlah Pesanan: " << total_pesanan << endl;
+            cout << endl;
+            cout << "Menu: " << menu_dipesan[i] << endl
+                << "Jumlah Pesanan: " << total_pesanan << endl
+                << "Total Pendapatan: " << total_pendapatan << endl
+                << "Periode Istirahat: " << periode_istirahat[i] << endl;
         }
     }
 
     if (!isMenuAvailable) {
         cout << "Tidak ada data pesanan yang tersedia." << endl;
-        return;
     }
 }
 
@@ -494,7 +498,6 @@ void updateStokMenuTersedia() {
 
     if (!found) {
         cout << "Gagal melakukan update untuk Menu " << menu << endl;
-        return;
     }
 }
 
@@ -504,14 +507,16 @@ void lihatSisaStokPerMenu() {
     bool isMenuAvailable = false;
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] != "") {
-            cout << "Menu: " << nama_menu[i] << ", Jumlah Stock: " << jumlah_stock[i] << endl;
+            cout << "Informasi Stok Menu:" << endl
+                << "  Menu: " << nama_menu[i] << endl
+                << "  Jumlah Stock: " << jumlah_stock[i] << endl;
+            cout << endl;
             isMenuAvailable = true;
         }
     }
 
     if (!isMenuAvailable) {
         cout << "Tidak ada Menu yang tersedia." << endl;
-        return;
     }
 }
 
@@ -548,18 +553,50 @@ void analisisMenu() {
 
 void lihatTotalPenjualanPerMenu() {
     cout << "\nTotal penjualan per menu:" << endl;
-    
+
+    string processedMenus[MAX_ITEMS]; // Array untuk menyimpan nama menu yang sudah diproses
+    int totalSales[MAX_ITEMS] = {0}; // Array untuk menyimpan total penjualan
+    double totalHarga[MAX_ITEMS] = {0};
+    int count = 0; // Penghitung untuk jumlah menu unik
+    double totalPendapatan = 0;
+
     bool isMenuAvailable = false;
+
     for (int i = 0; i < MAX_ITEMS; i++) {
-        if(nama_menu[i] != "") {
-            cout << "Menu: " << nama_menu[i] << ", Total Penjualan: " << menu_terjual[i] << endl;
+        if (nama_menu[i] != "") {
+            bool found = false;
+            for (int j = 0; j < count; j++) {
+                if (processedMenus[j] == nama_menu[i]) {
+                    totalSales[j] += menu_terjual[i]; // Tambahkan ke total penjualan yang sudah ada
+                    totalHarga[j] += total_harga[i];
+                    found = true;
+                    break;
+                }
+            }
+
+            // Jika menu belum diproses, tambahkan ke daftar
+            if (!found && count < MAX_ITEMS) {
+                processedMenus[count] = nama_menu[i];
+                totalSales[count] = menu_terjual[i];
+                totalHarga[count] = total_harga[i];
+                count++;
+            }
             isMenuAvailable = true;
         }
     }
 
-    if (!isMenuAvailable) {
+    if (isMenuAvailable) {
+        for (int k = 0; k < count; k++) {
+            cout << "Detail Penjualan:" << endl
+                << "  Menu: " << processedMenus[k] << endl
+                << "  Total Penjualan: " << totalSales[k] << endl
+                << "Total Harga: " << totalHarga[k] << endl;
+            cout << endl;
+            totalPendapatan += totalHarga[k];
+        }
+        cout << "Total keseluruhan pendapatan: " << totalPendapatan << endl;
+    } else {
         cout << "Tidak ada data penjualan yang tersedia." << endl;
-        return;
     }
 }
 

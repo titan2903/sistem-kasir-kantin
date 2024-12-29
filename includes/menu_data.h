@@ -5,6 +5,10 @@ using namespace std;
 
 const int MAX_ITEMS = 100;
 
+//! Current item count
+extern int currentItemStockCount;
+extern int currentItemPesananCount;
+
 //! Stock menu (Persiapan Menu)
 extern string nama_menu_terdaftar[MAX_ITEMS];
 extern string nama_menu[MAX_ITEMS];
@@ -20,6 +24,7 @@ extern string menu_dipesan[MAX_ITEMS];
 extern int jumlah_pesanan[MAX_ITEMS];
 extern int periode_istirahat[MAX_ITEMS];
 extern string status_menu[MAX_ITEMS];
+extern double total_harga[MAX_ITEMS];
 extern int waktu_produksi[MAX_ITEMS];
 extern time_t waktu_pesan[MAX_ITEMS];
 extern time_t waktu_selesai[MAX_ITEMS];
