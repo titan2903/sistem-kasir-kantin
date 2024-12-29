@@ -34,3 +34,6 @@
 # Debug files
 .vscode/
 test/
+
+# Binary files
+src/output
