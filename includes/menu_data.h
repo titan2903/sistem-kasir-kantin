@@ -5,7 +5,7 @@ using namespace std;
 
 const int MAX_ITEMS = 100;
 
-// Stock menu (Persiapan Menu)
+//! Stock menu (Persiapan Menu)
 extern string nama_menu_terdaftar[MAX_ITEMS];
 extern string nama_menu[MAX_ITEMS];
 extern int harga[MAX_ITEMS];
@@ -14,7 +14,7 @@ extern int menu_terjual[MAX_ITEMS];
 extern time_t tanggal_dibuat[MAX_ITEMS];
 extern time_t tanggal_terjual[MAX_ITEMS];
 
-// Pesanan pelanggan
+//! Pesanan pelanggan
 extern int nomor_pesanan[MAX_ITEMS];
 extern string menu_dipesan[MAX_ITEMS];
 extern int jumlah_pesanan[MAX_ITEMS];

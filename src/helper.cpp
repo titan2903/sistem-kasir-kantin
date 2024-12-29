@@ -31,6 +31,17 @@ bool foundExistingMenuPesanan(const string& menu) {
     return found;
 }
 
+bool checkStockMoreThenZero(const string& menu) {
+    bool found = false;
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        if (nama_menu[i] == menu && jumlah_stock[i] > 0) {
+             found = true;
+        }
+    }
+
+    return found;
+}
+
 bool foundExistingStockMenu(const string& menu) {
     bool found = false;
     for (int i = 0; i < MAX_ITEMS; i++) {
@@ -43,7 +54,5 @@ bool foundExistingStockMenu(const string& menu) {
 }
 
 int calculateTimeDifferenceInMinutes(time_t akhir, time_t awal) {
-    // cout << "Waktu selesai: " << ctime(&akhir);
-    // cout << "Waktu pesan: " << ctime(&awal);
     return difftime(akhir, awal) / 60;
 }

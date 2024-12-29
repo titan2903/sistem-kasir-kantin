@@ -38,7 +38,7 @@ void ownerMenu() {
         cout << "Pilih menu: ";
 
         if(cin >> choice) {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
             switch (choice) {
                 case 1:
                     rushHourManagement();
@@ -55,7 +55,7 @@ void ownerMenu() {
         } else {
             cout << "Input tidak valid, silakan masukkan angka." << endl;
             cin.clear();  
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
         }
     }
 }
@@ -70,7 +70,7 @@ void rushHourManagement() {
         cout << "Select an option: ";
         
         if(cin >> choice) {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
             switch (choice) {
                 case 1:
                     pengelolaanJamSibuk();
@@ -86,7 +86,7 @@ void rushHourManagement() {
         } else {
             cout << "Input tidak valid, silakan masukkan angka." << endl;
             cin.clear();  
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
         }
     }
 }
@@ -101,7 +101,7 @@ void foodManagement() {
         cout << "Select an option: ";
         
         if(cin >> choice) {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
             switch (choice) {
                 case 1:
                     kontrolStok();
@@ -117,14 +117,13 @@ void foodManagement() {
         } else {
             cout << "Input tidak valid, silakan masukkan angka." << endl;
             cin.clear();  
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
         }
     }
 }
 
 void pengelolaanJamSibuk() {
     int choice = 0;
-
     while (true) {
         cout << "\nPengelolaan Jam Sibuk:" << endl;
         cout << "1. Lihat semua total pesanan per periode istirahat" << endl;
@@ -134,7 +133,7 @@ void pengelolaanJamSibuk() {
         cout << "Select an option: ";
         
         if(cin >> choice) {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
             switch (choice) {
                 case 1:
                     melihatTotalPesananPerPeriodeIstirahat();
@@ -153,13 +152,13 @@ void pengelolaanJamSibuk() {
         } else {
             cout << "Input tidak valid, silakan masukkan angka." << endl;
             cin.clear();  
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
         }
     }
 }
 
 void melihatTotalPesananPerPeriodeIstirahat() {
-    cout << "Melihat semua total pesanan per periode istirahat:" << endl;
+    cout << "\nMelihat semua total pesanan per periode istirahat:" << endl;
 
     // Array untuk menyimpan tanggal yang telah diproses
     string processedDates[MAX_ITEMS];
@@ -168,8 +167,9 @@ void melihatTotalPesananPerPeriodeIstirahat() {
     // Array untuk menandai item yang sudah diproses
     bool processed[MAX_ITEMS] = {false};
 
+    bool isDataAvailable = false;
     for (int i = 0; i < MAX_ITEMS; i++) {
-        if (!processed[i]) {
+        if (!processed[i] && waktu_pesan[i] != 0) {
             struct tm *timeinfo = localtime(&waktu_pesan[i]);
             char buffer[11];
             strftime(buffer, 11, "%Y/%m/%d", timeinfo);
@@ -189,26 +189,31 @@ void melihatTotalPesananPerPeriodeIstirahat() {
                 int total_pesanan_periode_2 = 0;
                 int total_pesanan_periode_3 = 0;
 
-                cout << "Tanggal: " << tanggal << endl;
                 for (int j = 0; j < MAX_ITEMS; j++) {
-                    if (waktu_pesan[j] == waktu_pesan[i]) {
-                        if (periode_istirahat[j] == 1) {
-                            total_pesanan_periode_1 += jumlah_pesanan[j];
-                        } else if (periode_istirahat[j] == 2) {
-                            total_pesanan_periode_2 += jumlah_pesanan[j];
-                        } else if (periode_istirahat[j] == 3) {
-                            total_pesanan_periode_3 += jumlah_pesanan[j];
+                    if(waktu_pesan[j] != 0) {
+                        if (waktu_pesan[j] == waktu_pesan[i]) {
+                            if (periode_istirahat[j] == 1) {
+                                total_pesanan_periode_1 += jumlah_pesanan[j];
+                            } else if (periode_istirahat[j] == 2) {
+                                total_pesanan_periode_2 += jumlah_pesanan[j];
+                            } else if (periode_istirahat[j] == 3) {
+                                total_pesanan_periode_3 += jumlah_pesanan[j];
+                            }
+                            processed[j] = true;
+                            isDataAvailable = true;
                         }
-                        processed[j] = true;
                     }
                 }
 
-                cout << "Total pesanan periode istirahat 1: " << total_pesanan_periode_1 << " Pesanan" << endl;
-                cout << "Total pesanan periode istirahat 2: " << total_pesanan_periode_2 << " Pesanan" << endl;
-                cout << "Total pesanan periode istirahat 3: " << total_pesanan_periode_3 << " Pesanan" << endl;
-                cout << endl;
+                if(isDataAvailable) {
+                    cout << "Tanggal: " << tanggal << endl;
+                    cout << "Total pesanan periode istirahat 1: " << total_pesanan_periode_1 << " Pesanan" << endl;
+                    cout << "Total pesanan periode istirahat 2: " << total_pesanan_periode_2 << " Pesanan" << endl;
+                    cout << "Total pesanan periode istirahat 3: " << total_pesanan_periode_3 << " Pesanan" << endl;
+                    cout << endl;
 
-                processedDates[processedCount++] = tanggal; // Tandai tanggal ini sudah diproses
+                    processedDates[processedCount++] = tanggal;
+                }
             }
         }
     }
@@ -219,14 +224,14 @@ void melihatTotalPesananPerPeriodeIstirahat() {
 }
 
 void hitungTotalPesananPerPeriodeIstirahat() {
-    cout << "Total pesanan per periode istirahat:" << endl;
+    cout << "\nTotal pesanan per periode istirahat:" << endl;
 
     int jam_istirahat = 0;
 
     while (true) {
         cout << "Pilih Jam Istirahat (1, 2 atau 3): ";
         if (cin >> jam_istirahat) {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
             if (jam_istirahat >= 1 && jam_istirahat <= 3) {
                 break;
             } else {
@@ -235,7 +240,7 @@ void hitungTotalPesananPerPeriodeIstirahat() {
         } else {
             cout << "Input tidak valid, silakan masukkan angka." << endl;
             cin.clear();  
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
         }
     }
     
@@ -255,12 +260,12 @@ void hitungTotalPesananPerPeriodeIstirahat() {
 }
 
 void lihatStokMenuMenjelangIstirahat() {
-    cout << "Stock Menu Menjelang Istirahat:" << endl;
+    cout << "\nStock Menu Menjelang Istirahat:" << endl;
 
     bool isMenuAvailable = false;
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] != "") {
-            cout << "Menu: " << nama_menu[i] << ", Jumlah Stock: " << jumlah_stock[i] << ", Harga: " <<  harga[i] << endl;
+            cout << "Menu: " << nama_menu[i] << ", Jumlah Stock: " << jumlah_stock[i] << ", Harga: " <<  harga[i] << ", Tanggal Dibuat: " << ctime(&tanggal_dibuat[i]) << endl;
             isMenuAvailable = true;
         }
     }
@@ -280,7 +285,7 @@ void kapasitasLayanan() {
         cout << "Select an option: ";
         
         if(cin >> choice) {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
             switch (choice) {
                 case 1:
                     lihatRataRataWaktuLayananPerHari();
@@ -296,12 +301,14 @@ void kapasitasLayanan() {
         } else {
             cout << "Input tidak valid, silakan masukkan angka." << endl;
             cin.clear();  
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
         }
     }
 }
 
 void lihatRataRataWaktuLayananPerHari() {
+    cout << "\nRata-rata waktu layanan per Hari:" << endl;
+
     int total_waktu_layanan = 0;
     int count = 0;
 
@@ -313,7 +320,6 @@ void lihatRataRataWaktuLayananPerHari() {
     
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] != "" && waktu_pesan[i] != 0 && waktu_selesai[i] != 0) {
-            cout << "waktu pesan: " << ctime(&waktu_pesan[i]) << endl;
             struct tm *timeinfo = localtime(&waktu_pesan[i]);
             char buffer[11];
             strftime(buffer, 11, "%Y/%m/%d", timeinfo); // Format tanggal menjadi yyyy/mm/dd
@@ -334,7 +340,7 @@ void lihatRataRataWaktuLayananPerHari() {
                 if (arr_tanggal[i] == arr_tanggal[j] && !arr_tanggal[j].empty()) {
                     total_waktu += waktu_layanan[j];
                     count++;
-                    visited[j] = true; // Mark this date as visited
+                    visited[j] = true;
                 }
             }
 
@@ -355,7 +361,7 @@ void lihatRataRataWaktuLayananPerHari() {
 }
 
 void lihatJumlahPesananPerJenisMenu() {
-    cout << "Jumlah pesanan per jenis menu:" << endl;
+    cout << "\nJumlah pesanan per jenis menu:" << endl;
 
     bool isMenuAvailable = false;
     for (int i = 0; i < MAX_ITEMS; i++) {
@@ -402,7 +408,7 @@ void kontrolStok() {
         cout << "Select an option: ";
         
         if(cin >> choice) {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
             switch (choice) {
                 case 1:
                     updateStokMenuTersedia();
@@ -418,22 +424,22 @@ void kontrolStok() {
         } else {
             cout << "Input tidak valid, silakan masukkan angka." << endl;
             cin.clear();  
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
         }
     }
 }
 
 void updateStokMenuTersedia() {
-    cout << "Melakukan update stok menu tersedia:" << endl;
-
-    cout << "\nMenu yang tersedia saat ini:" << endl;
-
+    cout << "\nMelakukan update stok menu tersedia:" << endl;
+    
     bool isMenuAvailable = false;
+
+    cout << "\nStock Menu yang tersedia saat ini:" << endl;
     for (int i = 0; i < MAX_ITEMS; i++)
     {
         if(nama_menu[i] != "") {
-            isMenuAvailable = true;
             cout << "Menu: " << nama_menu[i] << ", Jumlah Stock: " << jumlah_stock[i] << endl;
+            isMenuAvailable = true;
         }
     }
 
@@ -441,34 +447,29 @@ void updateStokMenuTersedia() {
         cout << "Tidak ada menu yang tersedia." << endl;
         return;
     }
-    
-    string menu;
-    int jumlah;
 
+    cout << endl;
+    
     bool foundMenu = false;
+    string menu;
     while(!foundMenu) {
         cout << "Masukkan Menu yang akan diupdate stoknya: ";
         getline(cin, menu);
         if (menu == "") {
             cout << "Nama Menu tidak boleh kosong." << endl;
         } else {
-            for (int i = 0; i < MAX_ITEMS; i++) {
-                if (nama_menu[i] == menu) {
-                    foundMenu = true;
-                    break;
-                }
-            }
-
+            foundMenu = foundExistingStockMenu(menu);
             if(!foundMenu) {
                 cout << "Menu " << menu << " tidak ditemukan." << endl;
             }
         }
     }
 
+    int jumlah;
     while (true) {
-        cout << "Masukkan jumlah stok (tidak boleh 0) yang akan diupdate: ";
+        cout << "Masukkan jumlah stok (tidak boleh 0) yang akan ditambahkan stocknya: ";
         if (cin >> jumlah) {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
             if (jumlah >= 1) {
                 break;
             } else {
@@ -477,18 +478,17 @@ void updateStokMenuTersedia() {
         } else {
             cout << "Input tidak valid, silakan masukkan angka." << endl;
             cin.clear();  
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
         }
     }
 
     bool found = false;
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (nama_menu[i] == menu)
-        {
-            jumlah_stock[i] = jumlah;
-            cout << "Stok dengan Menu " << menu << " berhasil diupdate menjadi " << jumlah << endl;
+        {   
+            jumlah_stock[i] += jumlah;
+            cout << "Stok dengan Menu " << menu << " berhasil ditambahkan menjadi " << jumlah << endl;
             found = true;
-            break;
         }
     }
 
@@ -499,7 +499,7 @@ void updateStokMenuTersedia() {
 }
 
 void lihatSisaStokPerMenu() {
-    cout << "Stok Per Menu saat ini:" << endl;
+    cout << "\nStok Per Menu saat ini:" << endl;
 
     bool isMenuAvailable = false;
     for (int i = 0; i < MAX_ITEMS; i++) {
@@ -525,7 +525,7 @@ void analisisMenu() {
         cout << "Select an option: ";
         
         if(cin >> choice) {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
             switch (choice) {
                 case 1:
                     lihatTotalPenjualanPerMenu();
@@ -541,13 +541,13 @@ void analisisMenu() {
         } else {
             cout << "Input tidak valid, silakan masukkan angka." << endl;
             cin.clear();  
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
         }
     }
 }
 
 void lihatTotalPenjualanPerMenu() {
-    cout << "Total penjualan per menu:" << endl;
+    cout << "\nTotal penjualan per menu:" << endl;
     
     bool isMenuAvailable = false;
     for (int i = 0; i < MAX_ITEMS; i++) {
@@ -564,7 +564,7 @@ void lihatTotalPenjualanPerMenu() {
 }
 
 void lihatMenuYangPalingLakuPerHari() {
-    cout << "Menu yang paling laku per hari:" << endl;
+    cout << "\nMenu yang paling laku per hari:" << endl;
 
     // Array untuk menyimpan tanggal yang telah diproses
     string processedDates[MAX_ITEMS];
@@ -581,7 +581,7 @@ void lihatMenuYangPalingLakuPerHari() {
     }
 
     for (int i = 0; i < MAX_ITEMS; i++) {
-        if (!nama_menu[i].empty() && !processed[i]) {
+        if (!nama_menu[i].empty() && !processed[i] && tanggal_terjual[i] != 0) {
             struct tm *timeinfo = localtime(&tanggal_terjual[i]);
             char buffer[11];
             strftime(buffer, 11, "%Y/%m/%d", timeinfo);
@@ -611,7 +611,7 @@ void lihatMenuYangPalingLakuPerHari() {
                         }
                     }
                 }
-                processedDates[processedCount++] = tanggal; // Tandai tanggal ini sudah diproses
+                processedDates[processedCount++] = tanggal;
                 cout << endl;
             }
         }

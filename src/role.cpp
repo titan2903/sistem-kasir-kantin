@@ -18,7 +18,7 @@ int selectRole() {
         cout << "Enter your choice: ";
 
         if (cin >> choice) {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
             if (choice >= 1 && choice <= 3) {
                 return choice;
             } else {
@@ -27,7 +27,7 @@ int selectRole() {
         } else {
             cout << "Input tidak valid. Harap masukkan angka." << endl;
             cin.clear();  
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Discard the input
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
         }
     }
 }
