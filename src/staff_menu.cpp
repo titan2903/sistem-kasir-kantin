@@ -337,12 +337,13 @@ void lihatPesananPelanggan() {
     while (true) {
         cout << "Masukkan status pesanan untuk filter (kosongkan untuk semua): ";
         getline(cin, filterStatus);
-        if (!filterStatus.empty()) {
-            if (filterStatus != STATUS_SIAP && filterStatus != STATUS_TIDAK_SIAP) {
-                cout << "Status pesanan harus " << STATUS_SIAP << " atau " << STATUS_TIDAK_SIAP << ", silakan coba lagi." << endl;
-            } else {
-                break;
-            }
+
+        if (filterStatus.empty()) {
+            break;
+        } 
+
+        if (filterStatus != STATUS_SIAP && filterStatus != STATUS_TIDAK_SIAP) {
+            cout << "Status pesanan harus " << STATUS_SIAP << " atau " << STATUS_TIDAK_SIAP << ", silakan coba lagi." << endl;
         } else {
             break;
         }
