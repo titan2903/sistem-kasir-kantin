@@ -19,6 +19,7 @@ void lihatStokMenuMenjelangIstirahat();
 //! Kapasitas Layanan
 void lihatRataRataWaktuLayananPerHari();
 void lihatJumlahPesananPerJenisMenu();
+void estimateOrderCompletionTime();
 
 //! Kontrol Stok
 void updateStokMenuTersedia();
@@ -281,7 +282,8 @@ void kapasitasLayanan() {
         cout << "\nKapasitas Layanan:" << endl;
         cout << "1. Lihat rata-rata waktu layanan per hari" << endl;
         cout << "2. Lihat jumlah pesanan per jenis menu" << endl;
-        cout << "3. Back to Rush Hour Management" << endl;
+        cout << "3. Melihat estimasi waktu selesai pesanan berdasarkan rata-rata waktu produksi historis" << endl;
+        cout << "4. Back to Rush Hour Management" << endl;
         cout << "Select an option: ";
         
         if(cin >> choice) {
@@ -294,6 +296,9 @@ void kapasitasLayanan() {
                     lihatJumlahPesananPerJenisMenu();
                     break;
                 case 3:
+                    estimateOrderCompletionTime();
+                    break;
+                case 4:
                     return;
                 default:
                     cout << "Pilihan tidak valid, silakan coba lagi." << endl;
@@ -312,31 +317,30 @@ void lihatRataRataWaktuLayananPerHari() {
     int total_waktu_layanan = 0;
     int count = 0;
 
-    string arr_tanggal[MAX_ITEMS];
-    int waktu_layanan[MAX_ITEMS];
-    bool visited[MAX_ITEMS] = {false};
+    string arr_tanggal[currentItemPesananCount];
+    int waktu_layanan[currentItemPesananCount];
+    bool visited[currentItemPesananCount] = {false};
 
     bool isDataAvailable = false;
     
-    for (int i = 0; i < MAX_ITEMS; i++) {
+    for (int i = 0; i < currentItemPesananCount; i++) {
         if (nama_menu[i] != "" && waktu_pesan[i] != 0 && waktu_selesai[i] != 0) {
             struct tm *timeinfo = localtime(&waktu_pesan[i]);
             char buffer[11];
             strftime(buffer, 11, "%Y/%m/%d", timeinfo); // Format tanggal menjadi yyyy/mm/dd
             string tanggal(buffer);
 
-            cout << "tanggal: " << tanggal << endl;
             arr_tanggal[i] = tanggal;
             waktu_layanan[i] = calculateTimeDifferenceInMinutes(waktu_selesai[i], waktu_pesan[i]);
             isDataAvailable = true;
         }
     }
 
-    for (int i = 0; i < MAX_ITEMS; i++) {
+    for (int i = 0; i < currentItemPesananCount; i++) {
         if (!arr_tanggal[i].empty() && !visited[i]) {
             int total_waktu = 0;
             int count = 0;
-            for (int j = 0; j < MAX_ITEMS; j++) {
+            for (int j = 0; j < currentItemPesananCount; j++) {
                 if (arr_tanggal[i] == arr_tanggal[j] && !arr_tanggal[j].empty()) {
                     total_waktu += waktu_layanan[j];
                     count++;
@@ -346,7 +350,8 @@ void lihatRataRataWaktuLayananPerHari() {
 
             if (count > 0) {
                 double rata_rata_waktu = static_cast<double>(total_waktu) / count;
-                cout << "Rata Rata waktu layanan tanggal " << arr_tanggal[i] << " adalah " << rata_rata_waktu << " menit" << endl;
+                cout << "Rata Rata waktu layanan tanggal " << arr_tanggal[i] << " adalah " << rata_rata_waktu << " Menit" << endl;
+                medianWaktuProduksiHistoris(arr_tanggal[i], rata_rata_waktu);
             } else {
                 cout << "Tidak ada data waktu layanan yang tersedia." << endl;
                 return;
@@ -358,6 +363,89 @@ void lihatRataRataWaktuLayananPerHari() {
         cout << "Tidak ada data waktu layanan yang tersedia." << endl;
     }
 }
+
+// ! Function untuk melihat estimasi waktu selesai pesanan berdasarkan rata-rata waktu produksi historis
+void estimateOrderCompletionTime() {
+    cout << "\nEstimasi waktu selesai pesanan berdasarkan rata-rata waktu produksi historis:" << endl;
+
+    //! Inisialisasi variabel untuk total waktu layanan dan jumlah pesanan
+    int total_waktu_layanan = 0;
+    int count = 0;
+
+    //! Array untuk menyimpan tanggal dan waktu layanan
+    string arr_tanggal[currentItemPesananCount];
+    int waktu_layanan[currentItemPesananCount];
+    bool visited[currentItemPesananCount] = {false}; //! Array untuk menandai tanggal yang sudah diproses
+    
+    //! Loop untuk mengumpulkan data waktu layanan berdasarkan pesanan yang ada
+    for (int i = 0; i < currentItemPesananCount; i++) {
+        //! Memeriksa apakah nama menu tidak kosong dan waktu pesan serta waktu selesai valid
+        if (nama_menu[i] != "" && waktu_pesan[i] != 0 && waktu_selesai[i] != 0) {
+            //! Mengonversi waktu pesan ke format lokal
+            struct tm *timeinfo = localtime(&waktu_pesan[i]);
+            char buffer[11]; //! Buffer untuk menyimpan string tanggal
+            strftime(buffer, 11, "%Y/%m/%d", timeinfo); //! Format tanggal menjadi yyyy/mm/dd
+            string tanggal(buffer); //! Menyimpan tanggal dalam string
+
+            arr_tanggal[i] = tanggal; //! Menyimpan tanggal ke dalam array
+            //! Menghitung selisih waktu dalam menit antara waktu selesai dan waktu pesan
+            waktu_layanan[i] = calculateTimeDifferenceInMinutes(waktu_selesai[i], waktu_pesan[i]);
+        }
+    }
+
+    //! Loop untuk menghitung total waktu layanan berdasarkan tanggal
+    for (int i = 0; i < currentItemPesananCount; i++) {
+        //! Memeriksa apakah tanggal tidak kosong dan belum diproses
+        if (!arr_tanggal[i].empty() && !visited[i]) {
+            int total_waktu = 0; //! Inisialisasi total waktu untuk tanggal ini
+            int count = 0; //! Inisialisasi jumlah pesanan untuk tanggal ini
+            //! Loop untuk mencari semua pesanan dengan tanggal yang sama
+            for (int j = 0; j < currentItemPesananCount; j++) {
+                //! Memeriksa apakah tanggal sama dan tidak kosong
+                if (arr_tanggal[i] == arr_tanggal[j] && !arr_tanggal[j].empty()) {
+                    total_waktu += waktu_layanan[j]; //! Menambahkan waktu layanan ke total
+                    count++; //! Meningkatkan jumlah pesanan
+                    visited[j] = true; //! Menandai pesanan ini sebagai sudah diproses
+                }
+            }
+
+            //! Memeriksa apakah ada pesanan yang ditemukan
+            if (count > 0) {
+                //! Menghitung rata-rata waktu layanan
+                double rata_rata_waktu = static_cast<double>(total_waktu) / count;
+                //! Memperbarui data waktu produksi historis
+                medianWaktuProduksiHistoris(arr_tanggal[i], rata_rata_waktu);
+            } else {
+                //! Jika tidak ada data waktu layanan yang tersedia
+                cout << "Tidak ada data waktu layanan yang tersedia." << endl;
+                return; //! Keluar dari fungsi
+            }
+        }
+    }
+
+    //! Inisialisasi variabel untuk estimasi waktu selesai
+    double estimasiWaktuSelesai = 0;
+    //! Loop untuk menghitung estimasi waktu selesai berdasarkan data historis
+    for (int i = 0; i < currentItemMedianWaktuProduksiHistoris; i++) {
+        //! Memeriksa apakah historis waktu layanan tidak kosong
+        if (!historis_tanggal_layanan[i].empty()) {
+            //! Menampilkan tanggal dan rata-rata waktu layanan
+            cout << "Tanggal: " << historis_tanggal_layanan[i] << endl
+                 << "Rata-rata waktu layanan: " << rata_rata_waktu_layanan[i] << " Menit" << endl;
+            estimasiWaktuSelesai += rata_rata_waktu_layanan[i]; //! Menambahkan rata-rata waktu ke estimasi waktu selesai
+        }
+    }
+
+    //! Memeriksa apakah estimasi waktu selesai adalah 0
+    if (estimasiWaktuSelesai == 0) {
+        //! Jika tidak ada data estimasi waktu pesanan selesai tersedia
+        cout << "Tidak ada data estimasi waktu pesanan selesai tersedia." << endl;
+    } else {
+        //! Menampilkan estimasi waktu selesai pesanan
+        cout << "Estimasi waktu selesai pesanan: " << estimasiWaktuSelesai << " Menit" << endl;
+    }
+}
+
 
 void lihatJumlahPesananPerJenisMenu() {
     cout << "\nJumlah pesanan per jenis menu:" << endl;

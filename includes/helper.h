@@ -6,6 +6,8 @@ void updatePenguranganStokOtomatis(const std::string& menu, int pengurangan);
 
 void updatePenambahanMenuTerjualOtomatis(const std::string& menu, int penambahan);
 
+void medianWaktuProduksiHistoris(const std::string& tanggal, double waktu);
+
 bool foundExistingMenuPesanan(const std::string& menu);
 
 bool checkStockMoreThenZero(const std::string& menu);
