@@ -1,5 +1,6 @@
 #include <iostream>
 #include <limits>
+#include <regex>
 #include "../includes/menu_data.h"
 #include "../includes/helper.h"
 #include "../includes/const.h"
@@ -319,24 +320,209 @@ void inputPesananPelanggan() {
 void lihatPesananPelanggan() {
     cout << "\nPesanan Pelanggan:" << endl;
 
-    bool isPesananAvailable = false;
-    for (int i = 0; i < MAX_ITEMS; i++) {
+    bool isOrderAvailable = false;
+    for (int i = 0; i < currentItemPesananCount; i++) {
         if (menu_dipesan[i] != "") {
-            cout << "Detail Pesanan:" << endl
-                << "  Nomor Pesanan: " << nomor_pesanan[i] << endl
-                << "  Menu Dipesan: " << menu_dipesan[i] << endl
-                << "  Jumlah Pesanan: " << jumlah_pesanan[i] << endl
-                << "  Periode Istirahat: " << periode_istirahat[i] << endl
-                << "  Status Pesanan: " << status_menu[i] << endl
-                << "  Total Harga: Rp" << total_harga[i] << endl
-                << "  Waktu Pesan: " << ctime(&waktu_pesan[i]) << endl;
-            cout << endl;
-            isPesananAvailable = true;
+            isOrderAvailable = true;
         }
     }
 
+    if(!isOrderAvailable) {
+        cout << "Tidak ada pesanan yang tersedia." << endl;
+        return;
+    }
+
+    string filterStatus, filterAwalPeriode, filterAkhirPeriode, filterAwalPeriodeCopy, filterAkhirPeriodeCopy;
+
+    while (true) {
+        cout << "Masukkan status pesanan untuk filter (kosongkan untuk semua): ";
+        getline(cin, filterStatus);
+        if (!filterStatus.empty()) {
+            if (filterStatus != STATUS_SIAP && filterStatus != STATUS_TIDAK_SIAP) {
+                cout << "Status pesanan harus " << STATUS_SIAP << " atau " << STATUS_TIDAK_SIAP << ", silakan coba lagi." << endl;
+            } else {
+                break;
+            }
+        } else {
+            break;
+        }
+    }
+
+    while (true) {
+        cout << "Masukkan awal periode waktu (YYYY-MM-DD) untuk filter (kosongkan untuk semua): ";
+        getline(cin, filterAwalPeriode);
+
+        // Jika input kosong, keluar dari loop
+        if (filterAwalPeriode.empty()) {
+            break;
+        }
+
+        // Menghapus spasi di awal dan akhir string
+        filterAwalPeriode.erase(0, filterAwalPeriode.find_first_not_of(" \t"));
+        filterAwalPeriode.erase(filterAwalPeriode.find_last_not_of(" \t") + 1);
+
+        filterAwalPeriodeCopy = filterAwalPeriode; // Copy string untuk validasi regex
+
+        string parts[3]; // Array untuk menyimpan bagian-bagian tanggal
+        size_t pos = 0;
+        string delimiter = "-";
+        int index = 0; // Indeks untuk array parts
+
+        // Menggunakan loop untuk membagi string berdasarkan delimiter
+        while ((pos = filterAwalPeriode.find(delimiter)) != string::npos) {
+            parts[index++] = filterAwalPeriode.substr(0, pos); // Menyimpan bagian sebelum delimiter
+            filterAwalPeriode.erase(0, pos + delimiter.length()); // Menghapus bagian yang sudah diproses
+        }
+        parts[index] = filterAwalPeriode; // Menyimpan bagian terakhir
+
+        // Memastikan ada 3 bagian
+        if (index != 2 || parts[0].empty() || parts[1].empty() || parts[2].empty()) {
+            cout << "Format awal periode waktu harus YYYY-MM-DD, silakan coba lagi." << endl;
+            continue; // Kembali ke awal loop
+        }
+
+        // Mengonversi string ke integer
+        int tahun = stoi(parts[0]);
+        int bulan = stoi(parts[1]);
+        int hari = stoi(parts[2]);
+
+        // Memeriksa validitas tahun, bulan, dan hari
+        if (tahun < 1900 || tahun > 2100) {
+            cout << "Tahun harus antara 1900 dan 2100, silakan coba lagi." << endl;
+            continue; // Kembali ke awal loop
+        } else if (bulan <= 0 || bulan > 12) {
+            cout << "Format bulan harus antara 1 dan 12, silakan coba lagi." << endl;
+            continue; // Kembali ke awal loop
+        } else if (hari <= 0 || hari > 31) {
+            cout << "Format hari harus antara 1 dan 31, silakan coba lagi." << endl;
+            continue; // Kembali ke awal loop
+        }
+
+        // Validasi format menggunakan regex
+        regex datePattern("\\d{4}-\\d{2}-\\d{2}");
+        if (!regex_match(filterAwalPeriodeCopy, datePattern)) {
+            cout << "Format awal periode waktu harus YYYY-MM-DD, silakan coba lagi." << endl;
+            continue; // Kembali ke awal loop
+        }
+
+        break; // Keluar dari loop jika semua valid
+    }
+
+    while (true) {
+        cout << "Masukkan akhir periode waktu (YYYY-MM-DD) untuk filter (kosongkan untuk semua): ";
+        getline(cin, filterAkhirPeriode);
+
+        // Jika input kosong, keluar dari loop
+        if (filterAkhirPeriode.empty()) {
+            break;
+        }
+
+        // Menghapus spasi di akhir dan akhir string
+        filterAkhirPeriode.erase(0, filterAkhirPeriode.find_first_not_of(" \t"));
+        filterAkhirPeriode.erase(filterAkhirPeriode.find_last_not_of(" \t") + 1);
+
+        filterAkhirPeriodeCopy = filterAkhirPeriode; // Copy string untuk validasi regex
+
+        string parts[3]; // Array untuk menyimpan bagian-bagian tanggal
+        size_t pos = 0;
+        string delimiter = "-";
+        int index = 0; // Indeks untuk array parts
+
+        // Menggunakan loop untuk membagi string berdasarkan delimiter
+        while ((pos = filterAkhirPeriode.find(delimiter)) != string::npos) {
+            parts[index++] = filterAkhirPeriode.substr(0, pos); // Menyimpan bagian sebelum delimiter
+            filterAkhirPeriode.erase(0, pos + delimiter.length()); // Menghapus bagian yang sudah diproses
+        }
+        parts[index] = filterAkhirPeriode; // Menyimpan bagian terakhir
+
+        // Memastikan ada 3 bagian
+        if (index != 2 || parts[0].empty() || parts[1].empty() || parts[2].empty()) {
+            cout << "Format akhir periode waktu harus YYYY-MM-DD, silakan coba lagi." << endl;
+            continue; // Kembali ke akhir loop
+        }
+
+        // Mengonversi string ke integer
+        int tahun = stoi(parts[0]);
+        int bulan = stoi(parts[1]);
+        int hari = stoi(parts[2]);
+
+        // Memeriksa validitas tahun, bulan, dan hari
+        if (tahun < 1900 || tahun > 2100) {
+            cout << "Tahun harus antara 1900 dan 2100, silakan coba lagi." << endl;
+            continue; // Kembali ke akhir loop
+        } else if (bulan <= 0 || bulan > 12) {
+            cout << "Format bulan harus antara 1 dan 12, silakan coba lagi." << endl;
+            continue; // Kembali ke akhir loop
+        } else if (hari <= 0 || hari > 31) {
+            cout << "Format hari harus antara 1 dan 31, silakan coba lagi." << endl;
+            continue; // Kembali ke akhir loop
+        }
+
+        // Validasi format menggunakan regex
+        regex datePattern("\\d{4}-\\d{2}-\\d{2}");
+        if (!regex_match(filterAkhirPeriodeCopy, datePattern)) {
+            cout << "Format akhir periode waktu harus YYYY-MM-DD, silakan coba lagi." << endl;
+            continue; // Kembali ke akhir loop
+        }
+
+        break; // Keluar dari loop jika semua valid
+    }
+
+    // Validasi bahwa filter Awal Periode tidak lebih besar dari filter Akhir Periode
+    if (!filterAwalPeriodeCopy.empty() && !filterAkhirPeriodeCopy.empty()) {
+        struct tm tmAwal = {};
+        struct tm tmAkhir = {};
+        strptime(filterAwalPeriodeCopy.c_str(), "%Y-%m-%d", &tmAwal);
+        strptime(filterAkhirPeriodeCopy.c_str(), "%Y-%m-%d", &tmAkhir);
+
+        time_t awal = mktime(&tmAwal);
+        time_t akhir = mktime(&tmAkhir);
+
+        if (awal > akhir) {
+            cout << "Tanggal awal periode tidak boleh lebih besar dari tanggal akhir periode." << endl;
+            return; // Keluar dari fungsi jika validasi gagal
+        }
+    }
+
+    bool isPesananAvailable = false;
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        // Skip pesanan yang kosong
+        if (menu_dipesan[i] == "") continue;
+
+        // Filter berdasarkan status
+        if (!filterStatus.empty() && status_menu[i] != filterStatus) continue;
+
+        // Filter berdasarkan awal periode istirahat
+        if (!filterAwalPeriodeCopy.empty()) {
+            struct tm *pesananTime = localtime(&waktu_pesan[i]);
+            char timeBuffer[11]; // Format YYYY-MM-DD
+            strftime(timeBuffer, sizeof(timeBuffer), "%Y-%m-%d", pesananTime);
+            if (filterAwalPeriodeCopy > timeBuffer) continue; // Bandingkan string
+        }
+
+        // Filter berdasarkan akhir periode istirahat
+        if (!filterAkhirPeriodeCopy.empty()) {
+            struct tm *pesananTime = localtime(&waktu_pesan[i]);
+            char timeBuffer[11]; // Format YYYY-MM-DD
+            strftime(timeBuffer, sizeof(timeBuffer), "%Y-%m-%d", pesananTime);
+            if (filterAkhirPeriodeCopy < timeBuffer) continue; // Bandingkan string
+        }
+
+        // Tampilkan pesanan yang sesuai filter
+        cout << "\nDetail Pesanan:" << endl
+             << "  Nomor Pesanan: " << nomor_pesanan[i] << endl
+             << "  Menu Dipesan: " << menu_dipesan[i] << endl
+             << "  Jumlah Pesanan: " << jumlah_pesanan[i] << endl
+             << "  Periode Istirahat: " << periode_istirahat[i] << endl
+             << "  Status Pesanan: " << status_menu[i] << endl
+             << "  Total Harga: Rp" << total_harga[i] << endl
+             << "  Waktu Pesan: " << ctime(&waktu_pesan[i]) << endl;
+        cout << endl;
+        isPesananAvailable = true;
+    }
+
     if (!isPesananAvailable) {
-        cout << "Tidak ada pesanan pelanggan yang tersedia." << endl;
+        cout << "Tidak ada pesanan pelanggan yang sesuai dengan filter." << endl;
     }
 }
 
