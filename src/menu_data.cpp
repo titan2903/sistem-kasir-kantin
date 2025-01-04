@@ -4,6 +4,7 @@ using namespace std;
 //! Current item count
 int currentItemStockCount = 0;
 int currentItemPesananCount = 0;
+int currentItemMedianWaktuProduksiHistoris = 0;
 
 //! Stock menu (Persiapan Menu)
 string nama_menu_terdaftar[MAX_ITEMS];
@@ -24,3 +25,7 @@ double total_harga[MAX_ITEMS];
 int waktu_produksi[MAX_ITEMS];
 time_t waktu_pesan[MAX_ITEMS];
 time_t waktu_selesai[MAX_ITEMS];
+
+//! Historis rata-rata waktu layanan per hari
+string historis_tanggal_layanan[MAX_ITEMS];
+double rata_rata_waktu_layanan[MAX_ITEMS];

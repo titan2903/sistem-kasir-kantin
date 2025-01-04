@@ -20,6 +20,31 @@ void updatePenambahanMenuTerjualOtomatis(const string& menu, int penambahan) {
     }
 }
 
+void medianWaktuProduksiHistoris(const string& tanggal, double waktu) {
+    bool updated = false; //! Flag untuk menandai apakah ada pembaruan
+
+    for (int i = 0; i < MAX_ITEMS; i++) {
+        if (historis_tanggal_layanan[i] == tanggal) {
+            //! Jika historis_tanggal_layanan sama dengan tanggal, perbarui rata-rata
+            rata_rata_waktu_layanan[i] = waktu;
+            updated = true; //! Tandai bahwa pembaruan telah dilakukan
+            break; //! Keluar dari loop setelah pembaruan
+        }
+    }
+
+    //! Jika tidak ada pembaruan, cari tempat kosong untuk menambahkan data baru
+    if (!updated) {
+        for (int i = 0; i < MAX_ITEMS; i++) {
+            if (historis_tanggal_layanan[i].empty()) { //! Cek apakah tempat kosong
+                historis_tanggal_layanan[i] = tanggal; //! Tambahkan tanggal
+                rata_rata_waktu_layanan[i] = waktu; //! Tambahkan waktu
+                currentItemMedianWaktuProduksiHistoris++; //! Tambahkan jumlah item
+                break; //! Keluar dari loop setelah menambahkan data
+            }
+        }
+    }
+}
+
 bool foundExistingMenuPesanan(const string& menu) {
     bool found = false;
     for (int i = 0; i < MAX_ITEMS; i++) {

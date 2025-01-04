@@ -8,6 +8,7 @@ const int MAX_ITEMS = 100;
 //! Current item count
 extern int currentItemStockCount;
 extern int currentItemPesananCount;
+extern int currentItemMedianWaktuProduksiHistoris;
 
 //! Stock menu (Persiapan Menu)
 extern string nama_menu_terdaftar[MAX_ITEMS];
@@ -28,5 +29,9 @@ extern double total_harga[MAX_ITEMS];
 extern int waktu_produksi[MAX_ITEMS];
 extern time_t waktu_pesan[MAX_ITEMS];
 extern time_t waktu_selesai[MAX_ITEMS];
+
+//! Historis rata-rata waktu layanan per hari
+extern string historis_tanggal_layanan[MAX_ITEMS];
+extern double rata_rata_waktu_layanan[MAX_ITEMS];
 
 #endif
