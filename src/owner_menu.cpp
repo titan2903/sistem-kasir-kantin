@@ -527,8 +527,7 @@ void updateStokMenuTersedia() {
     bool isMenuAvailable = false;
 
     cout << "\nStock Menu yang tersedia saat ini:" << endl;
-    for (int i = 0; i < MAX_ITEMS; i++)
-    {
+    for (int i = 0; i < MAX_ITEMS; i++) {
         if(nama_menu[i] != "") {
             cout << "Menu: " << nama_menu[i] << ", Jumlah Stock: " << jumlah_stock[i] << endl;
             isMenuAvailable = true;
@@ -576,10 +575,14 @@ void updateStokMenuTersedia() {
 
     bool found = false;
     for (int i = 0; i < MAX_ITEMS; i++) {
-        if (nama_menu[i] == menu)
-        {   
+        if (nama_menu[i] == menu) {   
             jumlah_stock[i] += jumlah;
             cout << "Stok dengan Menu " << menu << " berhasil ditambahkan menjadi " << jumlah_stock[i] << endl;
+
+            // Cek apakah stok mendekati batas minimum
+            if (jumlah_stock[i] < MINIMUM_STOCK_THRESHOLD) {
+                cout << "Alert: Stok menu " << menu << " mendekati batas minimum!" << endl;
+            }
             found = true;
         }
     }
@@ -594,14 +597,7 @@ void lihatSisaStokPerMenu() {
 
     bool isMenuAvailable = false;
     for (int i = 0; i < MAX_ITEMS; i++) {
-        if (nama_menu[i] != "") {
-            cout << "Informasi Stok Menu:" << endl
-                << "  Menu: " << nama_menu[i] << endl
-                << "  Jumlah Stock: " << jumlah_stock[i] << endl;
-            cout << endl;
-            isMenuAvailable = true;
-        }
-    }
+       
 
     if (!isMenuAvailable) {
         cout << "Tidak ada Menu yang tersedia." << endl;
